@@ -84,6 +84,26 @@ const projects = [
     gradient: "from-violet-500 to-purple-600",
     category: "Gaming",
   },
+  {
+    title: "Bot Discord Reminder",
+    description: "A custom Discord bot for setting reminders for my tasks and events",
+    image: "/assets/botdc.png",
+    href: "#",
+    github: "#",
+    tech: ["JavaScript", "NODE"],
+    gradient: "from-violet-500 to-purple-600",
+    category: "Bot Discord",
+  },
+  {
+    title: "CV Builder",
+    description: "Website for creating and customizing professional CVs with various templates and export options",
+    image: "/assets/buatcv.png",
+    href: "https://igaramadana-buatcv.vercel.app",
+    github: "https://github.com/igaramadana/cv-builder",
+    tech: ["NextJS", "Tailwind", "TypeScript", "Shadcn"],
+    gradient: "from-violet-500 to-purple-600",
+    category: "Website",
+  },
 ];
 
 const ITEMS_PER_PAGE = 3;
