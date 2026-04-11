@@ -55,16 +55,6 @@ const projects = [
     category: "Web App",
   },
   {
-    title: "Sentra Nusantara FiveM Roleplay Server",
-    description: "A custom FiveM Roleplay server with unique scripts and features",
-    image: "/assets/sena.jpeg",
-    href: "#",
-    github: "#",
-    tech: ["Lua", "QBCore", "MySQL"],
-    gradient: "from-indigo-500 to-purple-600",
-    category: "Gaming",
-  },
-  {
     title: "Website Portofolio",
     description: "My personal website built with modern tech stack",
     image: "/assets/porto.png",
@@ -72,7 +62,28 @@ const projects = [
     github: "https://github.com/wendoj/portfolio",
     tech: ["Next.js", "Tailwind", "TypeScript"],
     gradient: "from-violet-500 to-purple-600",
-    category: "Portfolio",
+    category: "Web App",
+  },
+  {
+    title: "CV Builder",
+    description:
+      "Website for creating and customizing professional CVs with various templates and export options",
+    image: "/assets/buatcv.png",
+    href: "https://igaramadana-buatcv.vercel.app",
+    github: "https://github.com/igaramadana/cv-builder",
+    tech: ["NextJS", "Tailwind", "TypeScript", "Shadcn"],
+    gradient: "from-fuchsia-500 to-violet-600",
+    category: "Web App",
+  },
+  {
+    title: "Sentra Nusantara FiveM Roleplay Server",
+    description: "A custom FiveM server with unique scripts and features",
+    image: "/assets/sena.jpeg",
+    href: "#",
+    github: "#",
+    tech: ["Lua", "QBCore", "MySQL"],
+    gradient: "from-indigo-500 to-purple-600",
+    category: "FiveM",
   },
   {
     title: "Arena Battleground Fivem Server",
@@ -81,32 +92,76 @@ const projects = [
     href: "#",
     github: "#",
     tech: ["Lua", "ESX", "MySQL"],
-    gradient: "from-violet-500 to-purple-600",
-    category: "Gaming",
+    gradient: "from-sky-500 to-indigo-600",
+    category: "FiveM",
+  },
+  {
+    title: "Ox_lib Redesign",
+    description: "Redesign of the popular FiveM script ox_lib with improved UI and UX",
+    image: "/assets/ox-lib.png",
+    href: "#",
+    github: "https://github.com/igaramadana/ox_lib-redesign",
+    tech: ["Lua", "OX", "React"],
+    gradient: "from-sky-500 to-indigo-600",
+    category: "FiveM",
+  },
+  {
+    title: "Ox_lib Redesign Prodigy inspired",
+    description: "Redesign of the popular FiveM script ox_lib with improved UI and UX inspired by Prodigy RP 2.0 server",
+    image: "/assets/ox-lib_prodigy.png",
+    href: "#",
+    github: "#",
+    tech: ["Lua", "OX", "React"],
+    gradient: "from-sky-500 to-indigo-600",
+    category: "FiveM",
+  },
+  {
+    title: "Ox_inventory Redesign PUBG style",
+    description: "Redesign of the popular FiveM script ox_inventory with improved UI and UX inspired by IGMC",
+    image: "/assets/ox-invent_abri.png",
+    href: "#",
+    github: "#",
+    tech: ["Lua", "OX", "React"],
+    gradient: "from-sky-500 to-indigo-600",
+    category: "FiveM",
+  },
+  {
+    title: "Looting Ground Script",
+    description: "A custom fivem Script for looting ground items like PUBG for Arena Battleground server",
+    image: "/assets/looting.png",
+    href: "#",
+    github: "#",
+    tech: ["Lua", "ESX"],
+    gradient: "from-sky-500 to-indigo-600",
+    category: "FiveM",
   },
   {
     title: "Bot Discord Reminder",
-    description: "A custom Discord bot for setting reminders for my tasks and events",
+    description:
+      "A custom Discord bot for setting reminders for my tasks and events",
     image: "/assets/botdc.png",
     href: "#",
     github: "#",
-    tech: ["JavaScript", "NODE"],
-    gradient: "from-violet-500 to-purple-600",
-    category: "Bot Discord",
+    tech: ["JavaScript", "Node.js"],
+    gradient: "from-cyan-500 to-blue-600",
+    category: "Bot",
   },
   {
-    title: "CV Builder",
-    description: "Website for creating and customizing professional CVs with various templates and export options",
-    image: "/assets/buatcv.png",
-    href: "https://igaramadana-buatcv.vercel.app",
-    github: "https://github.com/igaramadana/cv-builder",
-    tech: ["NextJS", "Tailwind", "TypeScript", "Shadcn"],
-    gradient: "from-violet-500 to-purple-600",
-    category: "Website",
+    title: "Bot Arena Battleground",
+    description:
+      "A custom Discord bot for managing the Arena Battleground features like Matchresults, Leaderboard, and Event Announcements",
+    image: "/assets/abri-bot.png",
+    href: "#",
+    github: "#",
+    tech: ["LUA"],
+    gradient: "from-cyan-500 to-blue-600",
+    category: "Bot",
   },
-];
+] as const;
 
 const ITEMS_PER_PAGE = 3;
+const categories = ["All", "Web App", "FiveM", "Bot"] as const;
+type Category = (typeof categories)[number];
 
 function SectionButton({
   href,
@@ -136,8 +191,8 @@ function SectionButton({
         aria-hidden="true"
       />
       <span
-        className={`absolute inset-0 [clip-path:polygon(12px_0,100%_0,100%_calc(100%-12px),calc(100%-12px)_100%,0_100%,0_12px)] p-px ${
-          primary ? "bg-lime-400" : "bg-white/20"
+        className={`absolute inset-0 [clip-path:polygon(12px_0,100%_0,100%_calc(100%-12px),calc(100%-12px)_100%,0_100%,0_12px)] p-px transition-all duration-300 ${
+          primary ? "bg-lime-400" : "bg-white/25 group-hover:bg-lime-400"
         }`}
         aria-hidden="true"
       >
@@ -270,6 +325,50 @@ function TechBadge({
   );
 }
 
+function FilterButton({
+  active,
+  label,
+  onClick,
+}: {
+  active: boolean;
+  label: string;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="group relative inline-flex items-center justify-center px-4 py-2.5 transition-transform duration-150 active:scale-[0.97] lg:px-5"
+    >
+      <span
+        className={`absolute inset-0 [clip-path:polygon(10px_0,100%_0,100%_calc(100%-10px),calc(100%-10px)_100%,0_100%,0_10px)] transition-all duration-300 ${
+          active ? "bg-[#283222]" : "bg-[#0C0F14] group-hover:bg-[#11161d]"
+        }`}
+        aria-hidden="true"
+      />
+      <span
+        className={`absolute inset-0 [clip-path:polygon(10px_0,100%_0,100%_calc(100%-10px),calc(100%-10px)_100%,0_100%,0_10px)] p-px transition-all duration-300 ${
+          active ? "bg-lime-400" : "bg-white/20 group-hover:bg-lime-400"
+        }`}
+        aria-hidden="true"
+      >
+        <span
+          className={`block h-full w-full [clip-path:polygon(10px_0,100%_0,100%_calc(100%-10px),calc(100%-10px)_100%,0_100%,0_10px)] ${
+            active ? "bg-[#283222]" : "bg-[#0C0F14]"
+          }`}
+        />
+      </span>
+      <span
+        className={`relative font-quantico text-xs font-semibold uppercase tracking-[0.18em] transition-colors duration-300 lg:text-sm ${
+          active ? "text-lime-300" : "text-white/80 group-hover:text-white"
+        }`}
+      >
+        {label}
+      </span>
+    </button>
+  );
+}
+
 function ProjectCard({
   title,
   category,
@@ -286,7 +385,7 @@ function ProjectCard({
   href: string;
   description: string;
   github: string;
-  tech: string[];
+  tech: readonly string[];
   gradient: string;
 }) {
   const liveDisabled = href === "#" || href.trim() === "";
@@ -304,7 +403,7 @@ function ProjectCard({
           aria-hidden="true"
         />
         <div
-          className="absolute inset-px bg-[linear-gradient(155deg, rgba(255, 255, 255, 0.04) 0%, rgba(153, 153, 153, 0.04) 100%)] backdrop-blur-[2px]"
+          className="absolute inset-px bg-[linear-gradient(155deg,rgba(255,255,255,0.04)_0%,rgba(153,153,153,0.04)_100%)] backdrop-blur-[2px]"
           style={{
             clipPath:
               "polygon(18px 0,100% 0,100% calc(100% - 18px),calc(100% - 18px) 100%,0 100%,0 18px)",
@@ -314,10 +413,10 @@ function ProjectCard({
 
         <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
           <div
-            className={`absolute -left-10 top-0 h-24 w-24 bg-linear-to-r ${gradient} rounded-full blur-3xl opacity-20`}
+            className={`absolute -left-10 top-0 h-24 w-24 rounded-full bg-linear-to-r ${gradient} opacity-20 blur-3xl`}
           />
           <div
-            className={`absolute -right-10 bottom-0 h-24 w-24 bg-linear-to-r ${gradient} rounded-full blur-3xl opacity-20`}
+            className={`absolute -right-10 bottom-0 h-24 w-24 rounded-full bg-linear-to-r ${gradient} opacity-20 blur-3xl`}
           />
         </div>
 
@@ -421,7 +520,9 @@ function PaginationButton({
       />
       <div
         className={`absolute inset-0 p-px ${
-          disabled ? "bg-white/10" : "bg-linear-to-r from-lime-400/60 to-cyan-400/40"
+          disabled
+            ? "bg-white/10"
+            : "bg-linear-to-r from-lime-400/60 to-cyan-400/40"
         }`}
         style={{
           clipPath:
@@ -450,13 +551,22 @@ export default function ProjectsSection() {
   const gridRef = useRef<HTMLDivElement | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [direction, setDirection] = useState(0);
+  const [activeCategory, setActiveCategory] = useState<Category>("All");
 
-  const totalPages = Math.ceil(projects.length / ITEMS_PER_PAGE);
+  const filteredProjects = useMemo(() => {
+    if (activeCategory === "All") return projects;
+    return projects.filter((project) => project.category === activeCategory);
+  }, [activeCategory]);
+
+  const totalPages = Math.max(
+    1,
+    Math.ceil(filteredProjects.length / ITEMS_PER_PAGE)
+  );
 
   const paginatedProjects = useMemo(() => {
     const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-    return projects.slice(startIndex, startIndex + ITEMS_PER_PAGE);
-  }, [currentPage]);
+    return filteredProjects.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+  }, [currentPage, filteredProjects]);
 
   const scrollToGrid = () => {
     gridRef.current?.scrollIntoView({
@@ -465,22 +575,21 @@ export default function ProjectsSection() {
     });
   };
 
+  const handleCategoryChange = (category: Category) => {
+    if (category === activeCategory) return;
+
+    setDirection(1);
+    setCurrentPage(1);
+    setActiveCategory(category);
+    requestAnimationFrame(scrollToGrid);
+  };
+
   const goToPage = (page: number) => {
     if (page === currentPage || page < 1 || page > totalPages) return;
 
     setDirection(page > currentPage ? 1 : -1);
     setCurrentPage(page);
     requestAnimationFrame(scrollToGrid);
-  };
-
-  const goToPreviousPage = () => {
-    if (currentPage === 1) return;
-    goToPage(currentPage - 1);
-  };
-
-  const goToNextPage = () => {
-    if (currentPage === totalPages) return;
-    goToPage(currentPage + 1);
   };
 
   const pageVariants = {
@@ -559,17 +668,27 @@ export default function ProjectsSection() {
           </div>
 
           <p className="min-w-full text-center text-base leading-[1.6] text-white/60 lg:text-lg">
-            Kumpulan project web, sistem informasi, dan eksperimen digital yang
-            saya bangun dengan fokus pada performa, visual, dan pengalaman
-            pengguna.
+            Kumpulan project yang saya rapikan berdasarkan kategori agar lebih
+            mudah dilihat: Web App, FiveM, dan Bot.
           </p>
         </div>
+      </div>
+
+      <div className="relative flex flex-wrap items-center justify-center gap-3 px-6">
+        {categories.map((category) => (
+          <FilterButton
+            key={category}
+            label={category}
+            active={activeCategory === category}
+            onClick={() => handleCategoryChange(category)}
+          />
+        ))}
       </div>
 
       <div ref={gridRef} className="relative w-full max-w-7xl px-8 sm:px-10">
         <AnimatePresence mode="wait" custom={direction}>
           <motion.div
-            key={currentPage}
+            key={`${activeCategory}-${currentPage}`}
             custom={direction}
             variants={pageVariants}
             initial="initial"
@@ -579,7 +698,7 @@ export default function ProjectsSection() {
           >
             {paginatedProjects.map((project) => (
               <motion.div
-                key={`${currentPage}-${project.title}`}
+                key={`${activeCategory}-${currentPage}-${project.title}`}
                 custom={direction}
                 variants={cardVariants}
                 initial="initial"
@@ -598,7 +717,7 @@ export default function ProjectsSection() {
         <div className="relative flex items-center gap-5">
           <PaginationButton
             ariaLabel="Previous page"
-            onClick={goToPreviousPage}
+            onClick={() => goToPage(currentPage - 1)}
             disabled={currentPage === 1}
           >
             <ArrowLeft className="size-4" strokeWidth={2.5} />
@@ -648,7 +767,7 @@ export default function ProjectsSection() {
 
           <PaginationButton
             ariaLabel="Next page"
-            onClick={goToNextPage}
+            onClick={() => goToPage(currentPage + 1)}
             disabled={currentPage === totalPages}
           >
             <ArrowRight className="size-4" strokeWidth={2.5} />
