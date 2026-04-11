@@ -232,7 +232,7 @@ export default function HeroSection() {
 
                 <div className="hidden items-center gap-3 pt-2 lg:flex">
                   <SocialLink
-                    href="https://github.com/atherosmurf"
+                    href="https://github.com/igaramadana"
                     label="GitHub"
                   >
                     <GitHubLogoIcon className="h-5 w-5" />
