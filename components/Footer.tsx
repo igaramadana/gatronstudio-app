@@ -216,7 +216,7 @@ export default function Footer() {
 
             <div className="flex items-center gap-[1.125rem]">
               <SocialIconLink
-                href="https://github.com/atherosmurf"
+                href="https://github.com/igaramadana"
                 label="GitHub"
                 index={0}
               >
@@ -224,7 +224,7 @@ export default function Footer() {
               </SocialIconLink>
 
               <SocialIconLink
-                href="https://linkedin.com"
+                href="https://www.linkedin.com/in/iga-ramadana-sahputra-5797b9287?utm_source=share_via&utm_content=profile&utm_medium=member_android"
                 label="LinkedIn"
                 index={1}
               >
@@ -232,7 +232,7 @@ export default function Footer() {
               </SocialIconLink>
 
               <SocialIconLink
-                href="https://instagram.com"
+                href="https://instagram.com/igarmdna"
                 label="Instagram"
                 index={2}
               >
