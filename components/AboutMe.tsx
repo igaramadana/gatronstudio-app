@@ -101,16 +101,29 @@ export default function AboutSection() {
         </p>
 
         <div className="font-quantico text-2xl font-normal leading-[1.2] tracking-tight text-white/75 md:text-3xl lg:text-4xl xl:text-5xl">
-          <span>Saya seorang </span>
-          <Highlight>fullstack developer</Highlight>
-          <span> yang fokus membangun </span>
-          <Highlight>website modern</Highlight>
-          <span>, </span>
-          <Highlight>user experience</Highlight>
-          <span> yang clean, dan aplikasi yang bukan cuma berjalan dengan baik, tapi juga memberi </span>
-          <Highlight>impact nyata</Highlight>
-          <span> untuk personal brand, bisnis, dan produk digital.</span>
+          <span>Saya adalah seorang </span>
+            <Highlight>Fullstack Developer</Highlight>
+            <span> dan </span>
+            <Highlight>FiveM Developer</Highlight>
+            <span> yang saat ini berdomisili di </span>
+            <Highlight>Malang</Highlight>
+          <span>.</span>
         </div>
+
+        <p className="max-w-3xl text-sm leading-7 text-white/58 md:text-base">
+          Saya mulai mengenal dunia teknologi sejak usia 8 tahun, dan sejak saat itu
+          ketertarikan saya terhadap pengembangan digital terus tumbuh hingga menjadi
+          bagian penting dalam perjalanan karier saya.
+        </p>
+
+        <p className="max-w-3xl text-sm leading-7 text-white/58 md:text-base">
+          Selama kurang lebih 4 tahun, saya menekuni bidang web development dengan fokus
+          membangun solusi yang fungsional, efisien, dan user-friendly. Dalam 2 tahun
+          terakhir, saya juga aktif sebagai game developer, khususnya dalam pengembangan
+          server dan sistem pada platform FiveM. Bagi saya, teknologi bukan hanya
+          pekerjaan, tetapi juga passion yang terus saya eksplorasi dan kembangkan
+          setiap hari.
+        </p>
 
         <p className="max-w-3xl text-sm leading-7 text-white/58 md:text-base">
           Saya terbiasa bekerja dengan Next.js, Prisma, Supabase, dan pendekatan
@@ -118,8 +131,6 @@ export default function AboutSection() {
           Buat saya, website bukan cuma soal tampilan, tapi juga identitas,
           performa, dan pengalaman yang kuat untuk pengguna.
         </p>
-
-        <AboutButton href="#projects">Learn More</AboutButton>
       </div>
     </section>
   );
