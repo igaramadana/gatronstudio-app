@@ -9,7 +9,7 @@ const quantico = Quantico({
 });
 
 export const metadata: Metadata = {
-  title: "My Portfolio",
+  title: "Gatrons Studio | Portofolio",
   description: "Portfolio website",
 };
 
