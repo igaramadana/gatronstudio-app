@@ -92,13 +92,6 @@ export default function Navbar() {
           {navLinks.map((link) => (
             <NavItem key={link.name} {...link} />
           ))}
-
-          <Link
-            href="#contact"
-            className="font-quantico rounded-full border border-white/15 bg-white/5 px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-white transition-all duration-200 hover:scale-[1.03] hover:border-lime-300/50 hover:bg-lime-300/10 hover:text-lime-300"
-          >
-            Hire Me
-          </Link>
         </div>
 
         <div className="lg:hidden">
