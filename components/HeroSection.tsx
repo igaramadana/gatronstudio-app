@@ -206,7 +206,6 @@ function ScrollIndicator() {
 
 export default function HeroSection() {
   const roles = [
-    "Fullstack Developer",
     "FiveM Developer",
     "Web Developer",
   ];
@@ -330,7 +329,7 @@ export default function HeroSection() {
                     variants={itemVariants}
                     className="max-w-2xl text-sm leading-[1.7] text-white/72 lg:text-lg"
                   >
-                    Saya adalah seorang Fullstack Developer dan FiveM Developer,
+                    Saya adalah seorang Web Developer dan FiveM Developer,
                     domisili saat ini di Malang. Mengenal dunia teknologi sejak
                     usia 8 tahun. Menekuni hingga saat ini juga dan menjadi Web
                     Developer kurang lebih 4 tahun, dan saat ini menjadi Game
