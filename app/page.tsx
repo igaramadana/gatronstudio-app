@@ -8,11 +8,13 @@ import SnowFall from "@/components/SnowFall";
 import Footer from "@/components/Footer";
 import Project from "@/components/ProjectsSection";
 import Preloader from "@/components/Preloader";
+import Skills from "@/components/SkillsSection";
+import ContactSection from "@/components/ContactSection";
 
 function SectionDivider() {
   return (
     <div
-      className="h-px w-full opacity-40"
+      className="h-1 w-full opacity-40"
       style={{
         background:
           "linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgb(182, 255, 82) 50%, rgba(255, 255, 255, 0) 100%)",
@@ -38,6 +40,12 @@ export default function HomePage() {
 
         <SectionDivider />
         <Project />
+
+        <SectionDivider />
+        <Skills />
+
+        <SectionDivider />
+        <ContactSection />
 
         <SectionDivider />
         <Footer />
