@@ -3,8 +3,56 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import { GitHubLogoIcon, LinkedInLogoIcon } from "@radix-ui/react-icons";
 import { Mouse } from "lucide-react";
+
+const containerVariants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.12,
+      delayChildren: 0.15,
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: {
+    opacity: 0,
+    y: 30,
+    filter: "blur(10px)",
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    filter: "blur(0px)",
+    transition: {
+      duration: 0.8,
+      ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
+    },
+  },
+};
+
+const imageVariants = {
+  hidden: {
+    opacity: 0,
+    y: 40,
+    scale: 0.94,
+    filter: "blur(12px)",
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    filter: "blur(0px)",
+    transition: {
+      duration: 1,
+      ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
+      delay: 0.25,
+    },
+  },
+};
 
 function HeroButton({
   href,
@@ -32,7 +80,7 @@ function HeroButton({
       />
       <span
         className={`absolute inset-0 [clip-path:polygon(12px_0,100%_0,100%_calc(100%-12px),calc(100%-12px)_100%,0_100%,0_12px)] p-px ${
-          primary ? "bg-lime-400" : "bg-white/30"
+          primary ? "bg-lime-400" : "bg-white/30 group-hover:bg-lime-400"
         }`}
         aria-hidden="true"
       >
@@ -54,20 +102,33 @@ function SocialLink({
   href,
   label,
   children,
+  index,
 }: {
   href: string;
   label: string;
   children: React.ReactNode;
+  index: number;
 }) {
   return (
-    <Link
-      href={href}
-      target="_blank"
-      aria-label={label}
-      className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white backdrop-blur-sm transition-all duration-200 hover:scale-110 hover:border-lime-300/40 hover:text-lime-300"
+    <motion.div
+      initial={{ opacity: 0, scale: 0.85, y: 10 }}
+      whileInView={{ opacity: 1, scale: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.3 }}
+      transition={{
+        delay: 0.45 + index * 0.08,
+        duration: 0.4,
+        ease: [0.22, 1, 0.36, 1],
+      }}
     >
-      {children}
-    </Link>
+      <Link
+        href={href}
+        target="_blank"
+        aria-label={label}
+        className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white backdrop-blur-sm transition-all duration-200 hover:scale-110 hover:border-lime-300/40 hover:text-lime-300"
+      >
+        {children}
+      </Link>
+    </motion.div>
   );
 }
 
@@ -90,7 +151,13 @@ function FuturisticFrame() {
 
 function ScrollIndicator() {
   return (
-    <div className="pointer-events-none absolute bottom-8 right-4 z-30 hidden md:flex lg:right-6 xl:right-8">
+    <motion.div
+      initial={{ opacity: 0, y: 16 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.4 }}
+      transition={{ delay: 0.8, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+      className="pointer-events-none absolute bottom-8 right-4 z-30 hidden md:flex lg:right-6 xl:right-8"
+    >
       <div className="group relative flex flex-col items-center gap-4 px-4 py-5">
         <div
           className="absolute inset-0 bg-[#0C0F14]/85 backdrop-blur-sm"
@@ -119,9 +186,13 @@ function ScrollIndicator() {
         <div className="absolute left-2 top-2 h-2 w-2 rotate-45 bg-lime-300/70 shadow-[0_0_14px_rgba(163,230,53,0.7)]" />
         <div className="absolute bottom-2 right-2 h-2 w-2 rotate-45 bg-lime-300/40 shadow-[0_0_14px_rgba(163,230,53,0.45)]" />
 
-        <div className="relative flex items-center justify-center text-lime-300 drop-shadow-[0_0_10px_rgba(163,230,53,0.45)]">
+        <motion.div
+          animate={{ y: [0, 5, 0] }}
+          transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+          className="relative flex items-center justify-center text-lime-300 drop-shadow-[0_0_10px_rgba(163,230,53,0.45)]"
+        >
           <Mouse size={20} strokeWidth={1.8} />
-        </div>
+        </motion.div>
 
         <div className="relative flex h-8 items-center justify-center overflow-visible">
           <span className="font-quantico text-[10px] uppercase tracking-[0.28em] text-lime-300 [writing-mode:vertical-rl] rotate-180">
@@ -129,7 +200,7 @@ function ScrollIndicator() {
           </span>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
 
@@ -183,12 +254,39 @@ export default function HeroSection() {
 
   return (
     <section className="relative mt-[140px] w-full px-6 pb-6 sm:px-8 lg:px-10">
-      <div className="relative overflow-hidden bg-[#050505] [clip-path:polygon(28px_0,100%_0,100%_calc(100%-28px),calc(100%-28px)_100%,0_100%,0_28px)]">
+      <motion.div
+        initial={{ opacity: 0, y: 36 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.2 }}
+        transition={{
+          duration: 0.9,
+          ease: [0.22, 1, 0.36, 1],
+        }}
+        className="relative overflow-hidden bg-[#050505] [clip-path:polygon(28px_0,100%_0,100%_calc(100%-28px),calc(100%-28px)_100%,0_100%,0_28px)]"
+      >
         <FuturisticFrame />
 
-        <div className="pointer-events-none absolute left-[46%] top-[8%] hidden h-[560px] w-[560px] rounded-full bg-lime-400/10 blur-[140px] lg:block" />
-        <div className="pointer-events-none absolute right-[8%] top-[18%] hidden h-[360px] w-[360px] rounded-full bg-cyan-400/10 blur-[130px] lg:block" />
-        <div className="pointer-events-none absolute left-[15%] bottom-[8%] hidden h-[220px] w-[220px] rounded-full bg-lime-300/10 blur-[100px] lg:block" />
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1.2 }}
+          className="pointer-events-none absolute left-[46%] top-[8%] hidden h-[560px] w-[560px] rounded-full bg-lime-400/10 blur-[140px] lg:block"
+        />
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1.2, delay: 0.15 }}
+          className="pointer-events-none absolute right-[8%] top-[18%] hidden h-[360px] w-[360px] rounded-full bg-cyan-400/10 blur-[130px] lg:block"
+        />
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1.2, delay: 0.25 }}
+          className="pointer-events-none absolute left-[15%] bottom-[8%] hidden h-[220px] w-[220px] rounded-full bg-lime-300/10 blur-[100px] lg:block"
+        />
 
         <div className="relative min-h-[760px] lg:min-h-[78vh]">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(40,255,140,0.08),transparent_24%),radial-gradient(circle_at_80%_35%,rgba(0,180,255,0.07),transparent_22%),linear-gradient(135deg,#061015_0%,#040404_42%,#050505_100%)]" />
@@ -196,74 +294,123 @@ export default function HeroSection() {
           <div className="absolute inset-0 opacity-[0.035] [background-image:linear-gradient(rgba(255,255,255,0.15)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.15)_1px,transparent_1px)] [background-size:34px_34px]" />
 
           <div className="relative z-10 grid min-h-[760px] items-end gap-10 px-4 py-8 sm:px-6 lg:min-h-[78vh] lg:grid-cols-[1.1fr_0.9fr] lg:px-12 lg:py-0">
-            <div className="flex items-end lg:h-full lg:pb-16">
+            <motion.div
+              variants={containerVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.25 }}
+              className="flex items-end lg:h-full lg:pb-16"
+            >
               <div className="flex max-w-3xl flex-col items-start gap-4 sm:gap-6 lg:gap-8">
-                <div className="flex flex-col items-start gap-2 sm:gap-3 lg:gap-4">
-
-                  <h1 className="max-w-4xl font-quantico text-3xl font-bold uppercase leading-none tracking-tight text-white sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl">
+                <motion.div
+                  variants={itemVariants}
+                  className="flex flex-col items-start gap-2 sm:gap-3 lg:gap-4"
+                >
+                  <motion.h1
+                    variants={itemVariants}
+                    className="max-w-4xl font-quantico text-3xl font-bold uppercase leading-none tracking-tight text-white sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl"
+                  >
                     Halo, saya <br />
                     <span className="bg-gradient-to-b from-lime-300 via-lime-400 to-lime-500 bg-clip-text text-transparent">
                       Iga Ramadana Sahputra
                     </span>
-                  </h1>
+                  </motion.h1>
 
-                  <div className="min-h-[2rem] lg:min-h-[2.5rem]">
+                  <motion.div
+                    variants={itemVariants}
+                    className="min-h-[2rem] lg:min-h-[2.5rem]"
+                  >
                     <p className="font-quantico text-base uppercase tracking-[0.18em] text-lime-300 sm:text-lg lg:text-2xl">
                       {displayedRole}
                       <span className="ml-1 inline-block h-[1em] w-[3px] translate-y-[2px] animate-pulse bg-lime-400 align-baseline" />
                     </p>
-                  </div>
+                  </motion.div>
 
-                  <p className="max-w-2xl text-sm leading-[1.7] text-white/72 lg:text-lg">
+                  <motion.p
+                    variants={itemVariants}
+                    className="max-w-2xl text-sm leading-[1.7] text-white/72 lg:text-lg"
+                  >
                     Saya adalah seorang Fullstack Developer dan FiveM Developer,
                     domisili saat ini di Malang. Mengenal dunia teknologi sejak
                     usia 8 tahun. Menekuni hingga saat ini juga dan menjadi Web
                     Developer kurang lebih 4 tahun, dan saat ini menjadi Game
                     Developer (FiveM) yang berjalan sekitar 2 tahun.
-                  </p>
-                </div>
+                  </motion.p>
+                </motion.div>
 
-                <div className="flex flex-wrap items-start gap-3 sm:gap-4">
+                <motion.div
+                  variants={itemVariants}
+                  className="flex flex-wrap items-start gap-3 sm:gap-4"
+                >
                   <HeroButton href="#about">About Me</HeroButton>
                   <HeroButton href="#projects" primary>
                     Download CV
                   </HeroButton>
-                </div>
+                </motion.div>
 
-                <div className="hidden items-center gap-3 pt-2 lg:flex">
+                <motion.div
+                  variants={itemVariants}
+                  className="hidden items-center gap-3 pt-2 lg:flex"
+                >
                   <SocialLink
                     href="https://github.com/igaramadana"
                     label="GitHub"
+                    index={0}
                   >
                     <GitHubLogoIcon className="h-5 w-5" />
                   </SocialLink>
-                  <SocialLink href="https://linkedin.com" label="LinkedIn">
+                  <SocialLink
+                    href="https://linkedin.com"
+                    label="LinkedIn"
+                    index={1}
+                  >
                     <LinkedInLogoIcon className="h-5 w-5" />
                   </SocialLink>
-                </div>
+                </motion.div>
               </div>
-            </div>
+            </motion.div>
 
-            <div className="relative hidden h-full items-end justify-end lg:flex">
+            <motion.div
+              variants={imageVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.25 }}
+              className="relative hidden h-full items-end justify-end lg:flex"
+            >
               <div className="relative w-[400px] xl:w-[500px] 2xl:w-[560px]">
                 <div className="absolute inset-x-8 bottom-10 h-40 rounded-full bg-lime-400/20 blur-[90px]" />
                 <div className="absolute -right-8 top-24 h-52 w-52 rounded-full bg-cyan-400/10 blur-[110px]" />
                 <div className="absolute left-[8%] top-[10%] h-[75%] w-[80%] rounded-[40%] border border-lime-300/10 bg-[radial-gradient(circle_at_center,rgba(181,255,89,0.06),transparent_65%)] blur-sm" />
                 <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#050505] via-[#050505]/70 to-transparent" />
 
-                <Image
-                  src="/images/iga.png"
-                  alt="Wajahku"
-                  width={1000}
-                  height={1600}
-                  priority
-                  className="relative z-10 h-auto w-full object-contain drop-shadow-[0_20px_80px_rgba(0,0,0,0.75)]"
-                />
+                <motion.div
+                  animate={{ y: [0, -6, 0] }}
+                  transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+                >
+                  <Image
+                    src="/images/iga.png"
+                    alt="Wajahku"
+                    width={1000}
+                    height={1600}
+                    priority
+                    className="relative z-10 h-auto w-full object-contain drop-shadow-[0_20px_80px_rgba(0,0,0,0.75)]"
+                  />
+                </motion.div>
               </div>
-            </div>
+            </motion.div>
           </div>
 
-          <div className="relative z-10 px-4 pb-8 sm:px-6 lg:hidden">
+          <motion.div
+            initial={{ opacity: 0, y: 24, scale: 0.96 }}
+            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{
+              duration: 0.9,
+              delay: 0.25,
+              ease: [0.22, 1, 0.36, 1],
+            }}
+            className="relative z-10 px-4 pb-8 sm:px-6 lg:hidden"
+          >
             <div className="relative mx-auto mt-2 w-[280px] sm:w-[340px]">
               <div className="absolute inset-x-6 bottom-6 h-24 rounded-full bg-lime-400/20 blur-[60px]" />
               <Image
@@ -275,11 +422,11 @@ export default function HeroSection() {
                 className="relative z-10 h-auto w-full object-contain opacity-95 drop-shadow-[0_20px_50px_rgba(0,0,0,0.7)]"
               />
             </div>
-          </div>
+          </motion.div>
         </div>
 
         <ScrollIndicator />
-      </div>
+      </motion.div>
     </section>
   );
 }
