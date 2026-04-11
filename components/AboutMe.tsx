@@ -124,13 +124,6 @@ export default function AboutSection() {
           pekerjaan, tetapi juga passion yang terus saya eksplorasi dan kembangkan
           setiap hari.
         </p>
-
-        <p className="max-w-3xl text-sm leading-7 text-white/58 md:text-base">
-          Saya terbiasa bekerja dengan Next.js, Prisma, Supabase, dan pendekatan
-          pengembangan yang rapi, scalable, dan tetap memperhatikan detail visual.
-          Buat saya, website bukan cuma soal tampilan, tapi juga identitas,
-          performa, dan pengalaman yang kuat untuk pengguna.
-        </p>
       </div>
     </section>
   );
