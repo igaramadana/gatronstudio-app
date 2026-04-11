@@ -102,7 +102,7 @@ export default function AboutSection() {
 
         <div className="font-quantico text-2xl font-normal leading-[1.2] tracking-tight text-white/75 md:text-3xl lg:text-4xl xl:text-5xl">
           <span>Saya adalah seorang </span>
-            <Highlight>Fullstack Developer</Highlight>
+            <Highlight>Web Developer</Highlight>
             <span> dan </span>
             <Highlight>FiveM Developer</Highlight>
             <span> yang saat ini berdomisili di </span>
