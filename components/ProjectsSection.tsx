@@ -661,14 +661,14 @@ export default function ProjectsSection() {
       <div className="relative flex max-w-5xl flex-col items-center px-4 text-center sm:px-6">
         <div className="flex w-full flex-col items-center gap-3 lg:gap-4">
           <div className="flex flex-col items-center gap-0.5 font-quantico font-bold leading-[1.2]">
-            <p className="text-sm tracking-tight text-white">PROJECTS</p>
+            <p className="font-quantico text-sm font-bold uppercase tracking-[0.22em] text-white/55">PROJECTS</p>
             <h2 className="bg-linear-to-b from-lime-300 via-lime-400 to-lime-500 bg-clip-text text-center font-quantico text-3xl tracking-tight text-transparent sm:text-4xl lg:text-5xl xl:text-6xl">
               Explore What I Build
             </h2>
           </div>
 
           <p className="min-w-full text-center text-base leading-[1.6] text-white/60 lg:text-lg">
-            Kumpulan project yang saya rapikan berdasarkan kategori agar lebih
+            Kumpulan project yang saya kerjakan berdasarkan kategori agar lebih
             mudah dilihat: Web App, FiveM, dan Bot.
           </p>
         </div>
