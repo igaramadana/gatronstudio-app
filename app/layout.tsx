@@ -20,7 +20,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${quantico.variable} bg-[#050505] text-white`}>
+      <body
+        suppressHydrationWarning
+        className={`${quantico.variable} bg-[#050505] text-white antialiased`}
+      >
         {children}
       </body>
     </html>
