@@ -10,6 +10,7 @@ import Project from "@/components/ProjectsSection";
 import Preloader from "@/components/Preloader";
 import Skills from "@/components/SkillsSection";
 import ContactSection from "@/components/ContactSection";
+import FocusArea from "@/components/FocusArea";
 
 function SectionDivider() {
   return (
@@ -37,6 +38,9 @@ export default function HomePage() {
 
         <SectionDivider />
         <AboutMe />
+
+        <SectionDivider />
+        <FocusArea />
 
         <SectionDivider />
         <Project />
