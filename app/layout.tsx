@@ -1,4 +1,4 @@
-import { GoogleAnalytics } from "@next/third-parties/google";
+import Script from "next/script";
 import type { Metadata, Viewport } from "next";
 import { Quantico } from "next/font/google";
 import "lenis/dist/lenis.css";
@@ -20,9 +20,10 @@ const googleVerification =
 const googleAnalyticsId =
   process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID?.trim() || undefined;
 
-const validGoogleVerification = googleVerification?.startsWith("qUBaD_")
-  ? undefined
-  : googleVerification;
+const validGoogleVerification =
+  googleVerification === "your_google_search_console_token"
+    ? undefined
+    : googleVerification;
 
 const validGoogleAnalyticsId = googleAnalyticsId?.startsWith("G-")
   ? googleAnalyticsId
@@ -127,7 +128,29 @@ export default function RootLayout({
       </body>
 
       {validGoogleAnalyticsId ? (
-        <GoogleAnalytics gaId={validGoogleAnalyticsId} />
+        <>
+          <Script
+            id="google-analytics-library"
+            src={`https://www.googletagmanager.com/gtag/js?id=${validGoogleAnalyticsId}`}
+            strategy="afterInteractive"
+          />
+
+          <Script
+            id="google-analytics-config"
+            strategy="afterInteractive"
+            dangerouslySetInnerHTML={{
+              __html: `
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){window.dataLayer.push(arguments);}
+                window.gtag = window.gtag || gtag;
+                gtag('js', new Date());
+                gtag('config', '${validGoogleAnalyticsId}', {
+                  page_path: window.location.pathname,
+                });
+              `,
+            }}
+          />
+        </>
       ) : null}
     </html>
   );
