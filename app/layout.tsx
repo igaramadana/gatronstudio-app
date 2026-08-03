@@ -17,7 +17,8 @@ const quantico = Quantico({
 const googleVerification =
   process.env.GOOGLE_SITE_VERIFICATION?.trim() || undefined;
 
-const googleAnalyticsId = "G-PVJL7HP7C6";
+const googleAnalyticsId =
+  process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID?.trim() || undefined;
 
 const validGoogleVerification = googleVerification?.startsWith("qUBaD_")
   ? undefined
