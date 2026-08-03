@@ -1,3 +1,4 @@
+import { GoogleAnalytics } from "@next/third-parties/google";
 import type { Metadata, Viewport } from "next";
 import { Quantico } from "next/font/google";
 import "lenis/dist/lenis.css";
@@ -13,7 +14,19 @@ const quantico = Quantico({
   display: "swap",
 });
 
-const googleVerification = process.env.GOOGLE_SITE_VERIFICATION;
+const googleVerification =
+  process.env.GOOGLE_SITE_VERIFICATION?.trim() || undefined;
+
+const googleAnalyticsId =
+  process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID?.trim() || undefined;
+
+const validGoogleVerification = googleVerification?.startsWith("qUBaD_")
+  ? undefined
+  : googleVerification;
+
+const validGoogleAnalyticsId = googleAnalyticsId?.startsWith("G-")
+  ? googleAnalyticsId
+  : undefined;
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
@@ -78,9 +91,9 @@ export const metadata: Metadata = {
       "max-video-preview": -1,
     },
   },
-  verification: googleVerification
+  verification: validGoogleVerification
     ? {
-        google: googleVerification,
+        google: validGoogleVerification,
       }
     : undefined,
   icons: {
@@ -112,6 +125,10 @@ export default function RootLayout({
       >
         <AppProviders>{children}</AppProviders>
       </body>
+
+      {validGoogleAnalyticsId ? (
+        <GoogleAnalytics gaId={validGoogleAnalyticsId} />
+      ) : null}
     </html>
   );
 }
