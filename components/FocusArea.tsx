@@ -1,45 +1,6 @@
-import { Code2, Globe, Layers3, ServerCog } from "lucide-react";
-import Link from "next/link";
-
-function ActionButton({
-  href,
-  children,
-  primary = false,
-}: {
-  href: string;
-  children: React.ReactNode;
-  primary?: boolean;
-}) {
-  return (
-    <Link
-      href={href}
-      className={`group relative inline-flex items-center justify-center px-5 py-2.5 transition-transform duration-150 active:scale-[0.97] ${
-        primary ? "drop-shadow-[0_0_20px_rgba(163,230,53,0.14)]" : ""
-      }`}
-    >
-      <span
-        className={`absolute inset-0 [clip-path:polygon(12px_0,100%_0,100%_calc(100%-12px),calc(100%-12px)_100%,0_100%,0_12px)] ${
-          primary ? "bg-[#283222]" : "bg-[#0C0F14]"
-        }`}
-      />
-      <span
-        className={`absolute inset-0 [clip-path:polygon(12px_0,100%_0,100%_calc(100%-12px),calc(100%-12px)_100%,0_100%,0_12px)] p-px ${
-          primary ? "bg-lime-300" : "bg-white/20 group-hover:bg-lime-300"
-        }`}
-      >
-        <span
-          className={`block h-full w-full [clip-path:polygon(12px_0,100%_0,100%_calc(100%-12px),calc(100%-12px)_100%,0_100%,0_12px)] ${
-            primary ? "bg-[#283222]" : "bg-[#0C0F14]"
-          }`}
-        />
-      </span>
-
-      <span className="relative inline-flex items-center gap-2 font-quantico text-sm uppercase tracking-[0.16em] text-white">
-        {children}
-      </span>
-    </Link>
-  );
-}
+import { FiCode, FiGlobe, FiLayers, FiServer } from "react-icons/fi";
+import { InView, InViewGroup, InViewItem } from "@/components/motion-primitives/in-view";
+import ChamferButton from "@/components/ui/ChamferButton";
 
 function FeatureItem({
   icon,
@@ -162,9 +123,9 @@ function SpecializationCard({
         </div>
 
         <div className="mt-8">
-          <ActionButton href={ctaHref} primary>
+          <ChamferButton href={ctaHref} variant="primary">
             {ctaLabel}
-          </ActionButton>
+          </ChamferButton>
         </div>
       </div>
     </article>
@@ -183,7 +144,7 @@ export default function FocusArea() {
       <div className="pointer-events-none absolute right-[-10vw] bottom-[0vw] h-[22vw] w-[22vw] rounded-full bg-lime-300/10 blur-[120px]" />
 
       <div className="relative z-10 mx-auto max-w-7xl px-8 sm:px-10">
-        <div className="mb-12 max-w-3xl text-center lg:mx-auto lg:mb-16">
+        <InView className="mb-12 max-w-3xl text-center lg:mx-auto lg:mb-16">
             <p className="font-quantico text-sm font-bold uppercase tracking-[0.22em] text-white/55">
                 Focus Area
             </p>
@@ -195,65 +156,69 @@ export default function FocusArea() {
                 modern, dan fungsional, serta mengembangkan pengalaman FiveM yang
                 lebih immersive dengan identitas visual yang kuat.
             </p>
-        </div>
+        </InView>
 
-        <div className="grid gap-6 lg:grid-cols-2">
-          <SpecializationCard
+        <InViewGroup className="grid gap-6 lg:grid-cols-2">
+          <InViewItem>
+            <SpecializationCard
             eyebrow="Area 01"
             title="Web Development"
             description="Saya membangun website dan web app yang tidak hanya menarik secara visual, tapi juga jelas secara struktur, nyaman digunakan, dan relevan dengan kebutuhan bisnis atau personal brand."
-            ctaHref="/projects"
+            ctaHref="#projects"
             ctaLabel="See Web Projects"
             features={[
               {
-                icon: <Globe className="size-5" />,
+                icon: <FiGlobe className="size-5" />,
                 title: "Landing Page & Company Profile",
                 description:
                   "Cocok untuk personal brand, bisnis, studio, maupun kebutuhan promosi produk dengan tampilan yang lebih profesional.",
               },
               {
-                icon: <Layers3 className="size-5" />,
+                icon: <FiLayers className="size-5" />,
                 title: "Dashboard & Operational System",
                 description:
                   "Membuat sistem yang membantu pengelolaan data, workflow, dan proses internal agar lebih terstruktur dan mudah dipantau.",
               },
               {
-                icon: <Code2 className="size-5" />,
+                icon: <FiCode className="size-5" />,
                 title: "Modern Frontend Experience",
                 description:
                   "Fokus pada UI yang clean, responsif, dan konsisten supaya produk terasa lebih polished di berbagai ukuran layar.",
               },
             ]}
-          />
+            />
+          </InViewItem>
 
-          <SpecializationCard
+          <InViewItem>
+            <SpecializationCard
             eyebrow="Area 02"
             title="FiveM Development"
             description="Saya mengembangkan UI, experience, dan sistem pendukung untuk server FiveM dengan pendekatan yang lebih modern, immersive, dan selaras dengan identitas server."
-            ctaHref="/projects"
+            ctaHref="#projects"
             ctaLabel="See FiveM Projects"
             features={[
               {
-                icon: <ServerCog className="size-5" />,
+                icon: <FiServer className="size-5" />,
                 title: "Custom UI & Redesign",
                 description:
                   "Mendesain ulang elemen antarmuka agar terasa lebih premium, immersive, dan berbeda dari tampilan default.",
               },
               {
-                icon: <Layers3 className="size-5" />,
+                icon: <FiLayers className="size-5" />,
                 title: "Server Identity & Visual Direction",
                 description:
                   "Membantu membangun identitas visual server melalui interface yang lebih kuat, rapi, dan punya karakter.",
               },
               {
-                icon: <Code2 className="size-5" />,
+                icon: <FiCode className="size-5" />,
                 title: "Functional & Immersive Experience",
                 description:
                   "Menjaga agar tampilan tetap menarik tanpa mengorbankan fungsi, readability, dan kenyamanan player saat digunakan.",
               },
             ]}
-          />
-        </div>
+            />
+          </InViewItem>
+        </InViewGroup>
       </div>
     </section>
   );

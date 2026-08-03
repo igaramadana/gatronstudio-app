@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { Menu, X } from "lucide-react";
+import { FiMenu, FiX } from "react-icons/fi";
 import clsx from "clsx";
 
 const navLinks = [
@@ -54,10 +54,25 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
-    onScroll();
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
+    let frame = 0;
+
+    const updateScrolledState = () => {
+      frame = 0;
+      setScrolled(window.scrollY > 24);
+    };
+
+    const onScroll = () => {
+      if (frame) return;
+      frame = window.requestAnimationFrame(updateScrolledState);
+    };
+
+    updateScrolledState();
+    window.addEventListener("scroll", onScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      if (frame) window.cancelAnimationFrame(frame);
+    };
   }, []);
 
   return (
@@ -70,6 +85,7 @@ export default function Navbar() {
       )}
     >
       <nav
+        aria-label="Navigasi utama"
         className={clsx(
           "mx-auto flex w-full max-w-7xl items-center justify-between px-8 sm:px-10 transition-all duration-300",
           scrolled ? "py-4" : "py-6 xl:py-8"
@@ -77,11 +93,11 @@ export default function Navbar() {
       >
         <Link
           href="/"
-          className="relative block w-[160px] shrink-0 transition-opacity duration-200 hover:opacity-80 lg:h-14 lg:w-[220px]"
+          className="relative block h-10 w-[160px] shrink-0 transition-opacity duration-200 hover:opacity-80 lg:h-14 lg:w-[220px]"
         >
           <Image
-            src="/images/logo.png"
-            alt="Logo"
+            src="/images/logo.webp"
+            alt="Gatrons Studio"
             fill
             priority
             className="object-contain"
@@ -98,16 +114,19 @@ export default function Navbar() {
         <div className="lg:hidden">
           <button
             type="button"
-            aria-label={isOpen ? "Close menu" : "Open menu"}
+            aria-label={isOpen ? "Tutup menu" : "Buka menu"}
+            aria-expanded={isOpen}
+            aria-controls="mobile-navigation"
             onClick={() => setIsOpen((prev) => !prev)}
             className="relative flex h-10 w-10 items-center justify-center text-white transition-all duration-200 hover:scale-110 active:scale-95"
           >
-            {isOpen ? <X size={24} strokeWidth={2} /> : <Menu size={24} strokeWidth={2} />}
+            {isOpen ? <FiX size={24} strokeWidth={2} /> : <FiMenu size={24} strokeWidth={2} />}
           </button>
         </div>
       </nav>
 
       <div
+        id="mobile-navigation"
         className={clsx(
           "overflow-hidden transition-all duration-300 lg:hidden",
           isOpen

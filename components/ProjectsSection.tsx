@@ -2,20 +2,28 @@
 
 import { useMemo, useRef, useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
-import { AnimatePresence, motion } from "framer-motion";
+import { useLenis } from "lenis/react";
+
+import { InView } from "@/components/motion-primitives/in-view";
 import {
-  ArrowLeft,
-  ArrowRight,
-  GitBranch,
-  ExternalLink,
-} from "lucide-react";
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+} from "@/components/motion-primitives/carousel";
+import ChamferButton from "@/components/ui/ChamferButton";
+import { projectCarouselTransition, revealVariants } from "@/lib/motion";
+import {
+  FiArrowLeft,
+  FiArrowRight,
+  FiExternalLink,
+  FiGitBranch,
+} from "react-icons/fi";
 
 const projects = [
   {
     title: "Sistem Informasi Tata Tertib Kampus",
     description: "Project Based Learning (PBL) for managing campus regulations",
-    image: "/assets/tatib.png",
+    image: "/assets/tatib.webp",
     href: "#",
     github: "https://github.com/igaramadana/PWD_PBLSITatib",
     tech: ["BootStrap", "CSS", "PHP"],
@@ -26,7 +34,7 @@ const projects = [
     title: "Sistem Informasi Pembayaran UKT Mahasiswa",
     description:
       "UTS Mata Kuliah Pemrograman Web Lanjut menggunakan Laravel dan payment gateway Midtrans",
-    image: "/assets/ukt.png",
+    image: "/assets/ukt.webp",
     href: "#",
     github: "https://github.com/igaramadana/UTS_SistemPembayaranUKT",
     tech: ["Laravel", "Bootstrap", "SCSS"],
@@ -37,7 +45,7 @@ const projects = [
     title: "Sistem Informasi Pendaftaran Ujian TOEIC",
     description:
       "Project Based Learning (PBL) for managing TOEIC exam registrations",
-    image: "/assets/toeic.png",
+    image: "/assets/toeic.webp",
     href: "#",
     github: "https://github.com/igaramadana/PWL_PBL_TOEIC",
     tech: ["Laravel", "TailwindCSS", "Flowbite"],
@@ -47,7 +55,7 @@ const projects = [
   {
     title: "KangDjoe",
     description: "Operational website for KangDjoe Cheese Company",
-    image: "/assets/kangdjoe.png",
+    image: "/assets/kangdjoe.webp",
     href: "https://operasional.kangdjoe.com/",
     github: "https://github.com/igaramadana/cheeseops",
     tech: ["Laravel", "Flowbite", "TailwindCSS"],
@@ -57,7 +65,7 @@ const projects = [
   {
     title: "Website Portofolio",
     description: "My personal website built with modern tech stack",
-    image: "/assets/porto.png",
+    image: "/assets/porto.webp",
     href: "#",
     github: "https://github.com/wendoj/portfolio",
     tech: ["Next.js", "Tailwind", "TypeScript"],
@@ -68,7 +76,7 @@ const projects = [
     title: "CV Builder",
     description:
       "Website for creating and customizing professional CVs with various templates and export options",
-    image: "/assets/buatcv.png",
+    image: "/assets/buatcv.webp",
     href: "https://igaramadana-buatcv.vercel.app",
     github: "https://github.com/igaramadana/cv-builder",
     tech: ["NextJS", "Tailwind", "TypeScript", "Shadcn"],
@@ -78,7 +86,7 @@ const projects = [
   {
     title: "Sentra Nusantara FiveM Roleplay Server",
     description: "A custom FiveM server with unique scripts and features",
-    image: "/assets/sena.jpeg",
+    image: "/assets/sena.webp",
     href: "#",
     github: "#",
     tech: ["Lua", "QBCore", "MySQL"],
@@ -88,7 +96,7 @@ const projects = [
   {
     title: "Arena Battleground Fivem Server",
     description: "A custom FiveM server with unique scripts and features",
-    image: "/assets/abri.png",
+    image: "/assets/abri.webp",
     href: "#",
     github: "#",
     tech: ["Lua", "ESX", "MySQL"],
@@ -97,8 +105,9 @@ const projects = [
   },
   {
     title: "Ox_lib Redesign",
-    description: "Redesign of the popular FiveM script ox_lib with improved UI and UX",
-    image: "/assets/ox-lib.png",
+    description:
+      "Redesign of the popular FiveM script ox_lib with improved UI and UX",
+    image: "/assets/ox-lib.webp",
     href: "#",
     github: "https://github.com/igaramadana/ox_lib-redesign",
     tech: ["Lua", "OX", "React"],
@@ -107,8 +116,9 @@ const projects = [
   },
   {
     title: "Ox_lib Redesign Prodigy inspired",
-    description: "Redesign of the popular FiveM script ox_lib with improved UI and UX inspired by Prodigy RP 2.0 server",
-    image: "/assets/ox-lib_prodigy.png",
+    description:
+      "Redesign of the popular FiveM script ox_lib with improved UI and UX inspired by Prodigy RP 2.0 server",
+    image: "/assets/ox-lib_prodigy.webp",
     href: "#",
     github: "#",
     tech: ["Lua", "OX", "React"],
@@ -117,8 +127,9 @@ const projects = [
   },
   {
     title: "Ox_inventory Redesign PUBG style",
-    description: "Redesign of the popular FiveM script ox_inventory with improved UI and UX inspired by IGMC",
-    image: "/assets/ox-invent_abri.png",
+    description:
+      "Redesign of the popular FiveM script ox_inventory with improved UI and UX inspired by IGMC",
+    image: "/assets/ox-invent_abri.webp",
     href: "#",
     github: "#",
     tech: ["Lua", "OX", "React"],
@@ -127,8 +138,9 @@ const projects = [
   },
   {
     title: "Looting Ground Script",
-    description: "A custom fivem Script for looting ground items like PUBG for Arena Battleground server",
-    image: "/assets/looting.png",
+    description:
+      "A custom fivem Script for looting ground items like PUBG for Arena Battleground server",
+    image: "/assets/looting.webp",
     href: "#",
     github: "#",
     tech: ["Lua", "ESX"],
@@ -139,7 +151,7 @@ const projects = [
     title: "Bot Discord Reminder",
     description:
       "A custom Discord bot for setting reminders for my tasks and events",
-    image: "/assets/botdc.png",
+    image: "/assets/botdc.webp",
     href: "#",
     github: "#",
     tech: ["JavaScript", "Node.js"],
@@ -150,7 +162,7 @@ const projects = [
     title: "Bot Arena Battleground",
     description:
       "A custom Discord bot for managing the Arena Battleground features like Matchresults, Leaderboard, and Event Announcements",
-    image: "/assets/abri-bot.png",
+    image: "/assets/abri-bot.webp",
     href: "#",
     github: "#",
     tech: ["LUA"],
@@ -162,68 +174,6 @@ const projects = [
 const ITEMS_PER_PAGE = 3;
 const categories = ["All", "Web App", "FiveM", "Bot"] as const;
 type Category = (typeof categories)[number];
-
-function SectionButton({
-  href,
-  children,
-  primary = false,
-  external = false,
-}: {
-  href: string;
-  children: React.ReactNode;
-  primary?: boolean;
-  external?: boolean;
-}) {
-  const isDisabled = href === "#" || href.trim() === "";
-
-  const className = `group relative inline-flex shrink-0 items-center justify-center px-5 py-2.5 transition-transform duration-150 active:scale-[0.97] lg:px-6 lg:py-3 ${
-    primary ? "drop-shadow-[0_0_24px_rgba(181,255,89,0.2)]" : ""
-  } ${isDisabled ? "pointer-events-none opacity-50" : ""}`;
-
-  const content = (
-    <>
-      <span
-        className={`absolute inset-0 [clip-path:polygon(12px_0,100%_0,100%_calc(100%-12px),calc(100%-12px)_100%,0_100%,0_12px)] transition-all duration-300 ${
-          primary
-            ? "bg-[#283222] group-hover:brightness-150"
-            : "bg-[#0C0F14] group-hover:brightness-125"
-        }`}
-        aria-hidden="true"
-      />
-      <span
-        className={`absolute inset-0 [clip-path:polygon(12px_0,100%_0,100%_calc(100%-12px),calc(100%-12px)_100%,0_100%,0_12px)] p-px transition-all duration-300 ${
-          primary ? "bg-lime-400" : "bg-white/25 group-hover:bg-lime-400"
-        }`}
-        aria-hidden="true"
-      >
-        <span
-          className={`block h-full w-full [clip-path:polygon(12px_0,100%_0,100%_calc(100%-12px),calc(100%-12px)_100%,0_100%,0_12px)] ${
-            primary ? "bg-[#283222]" : "bg-[#0C0F14]"
-          }`}
-        />
-      </span>
-
-      <span className="relative inline-flex items-center gap-2 font-quantico text-sm uppercase leading-none text-white transition-all duration-300 group-hover:text-white/90 lg:text-[1.02rem]">
-        {children}
-      </span>
-    </>
-  );
-
-  if (isDisabled) {
-    return <div className={className}>{content}</div>;
-  }
-
-  return (
-    <Link
-      href={href}
-      className={className}
-      target={external ? "_blank" : undefined}
-      rel={external ? "noopener noreferrer" : undefined}
-    >
-      {content}
-    </Link>
-  );
-}
 
 function CategoryBadge({
   label,
@@ -275,13 +225,7 @@ function CategoryBadge({
   );
 }
 
-function TechBadge({
-  label,
-  gradient,
-}: {
-  label: string;
-  gradient: string;
-}) {
+function TechBadge({ label, gradient }: { label: string; gradient: string }) {
   return (
     <span className="group relative inline-flex">
       <span
@@ -337,6 +281,7 @@ function FilterButton({
   return (
     <button
       type="button"
+      aria-pressed={active}
       onClick={onClick}
       className="group relative inline-flex items-center justify-center px-4 py-2.5 transition-transform duration-150 active:scale-[0.97] lg:px-5"
     >
@@ -436,6 +381,7 @@ function ProjectCard({
                   fill
                   className="object-cover transition-transform duration-500 group-hover:scale-105"
                   sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
+                  draggable={false}
                 />
               </div>
 
@@ -468,19 +414,28 @@ function ProjectCard({
           </div>
 
           <div className="mt-auto flex flex-wrap items-stretch gap-3 pt-2">
-            <SectionButton href={href} primary external={!liveDisabled}>
+            <ChamferButton
+              href={href}
+              variant="primary"
+              external={!liveDisabled}
+              disabled={liveDisabled}
+            >
               <>
-                <ExternalLink className="size-4" />
+                <FiExternalLink className="size-4" />
                 Live Demo
               </>
-            </SectionButton>
+            </ChamferButton>
 
-            <SectionButton href={github} external={!githubDisabled}>
+            <ChamferButton
+              href={github}
+              external={!githubDisabled}
+              disabled={githubDisabled}
+            >
               <>
-                <GitBranch className="size-4" />
+                <FiGitBranch className="size-4" />
                 Github
               </>
-            </SectionButton>
+            </ChamferButton>
           </div>
         </div>
       </div>
@@ -502,10 +457,8 @@ function PaginationButton({
   return (
     <button
       aria-label={ariaLabel}
-      className={`group relative flex size-11 items-center justify-center transition-all duration-300 ${
-        disabled
-          ? "cursor-not-allowed opacity-35"
-          : "hover:-translate-y-0.5 hover:opacity-100"
+      className={`group relative flex size-11 items-center justify-center transition-opacity duration-200 ${
+        disabled ? "cursor-not-allowed opacity-35" : "hover:opacity-80"
       }`}
       type="button"
       onClick={onClick}
@@ -537,22 +490,16 @@ function PaginationButton({
           }}
         />
       </div>
-      {!disabled && (
-        <div className="absolute inset-0 bg-lime-300/10 opacity-0 blur-md transition-opacity duration-300 group-hover:opacity-100" />
-      )}
-      <span className="relative text-white transition-transform duration-300 group-hover:scale-110">
-        {children}
-      </span>
+      <span className="relative text-white">{children}</span>
     </button>
   );
 }
 
 export default function ProjectsSection() {
+  const lenis = useLenis();
   const gridRef = useRef<HTMLDivElement | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [direction, setDirection] = useState(0);
   const [activeCategory, setActiveCategory] = useState<Category>("All");
-
   const filteredProjects = useMemo(() => {
     if (activeCategory === "All") return projects;
     return projects.filter((project) => project.category === activeCategory);
@@ -560,16 +507,27 @@ export default function ProjectsSection() {
 
   const totalPages = Math.max(
     1,
-    Math.ceil(filteredProjects.length / ITEMS_PER_PAGE)
+    Math.ceil(filteredProjects.length / ITEMS_PER_PAGE),
   );
 
-  const paginatedProjects = useMemo(() => {
-    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-    return filteredProjects.slice(startIndex, startIndex + ITEMS_PER_PAGE);
-  }, [currentPage, filteredProjects]);
+  const projectPages = useMemo(
+    () =>
+      Array.from({ length: totalPages }, (_, pageIndex) => {
+        const startIndex = pageIndex * ITEMS_PER_PAGE;
+        return filteredProjects.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+      }),
+    [filteredProjects, totalPages],
+  );
 
   const scrollToGrid = () => {
-    gridRef.current?.scrollIntoView({
+    if (!gridRef.current) return;
+
+    if (lenis) {
+      lenis.scrollTo(gridRef.current, { offset: -96 });
+      return;
+    }
+
+    gridRef.current.scrollIntoView({
       behavior: "smooth",
       block: "start",
     });
@@ -578,7 +536,6 @@ export default function ProjectsSection() {
   const handleCategoryChange = (category: Category) => {
     if (category === activeCategory) return;
 
-    setDirection(1);
     setCurrentPage(1);
     setActiveCategory(category);
     requestAnimationFrame(scrollToGrid);
@@ -587,67 +544,7 @@ export default function ProjectsSection() {
   const goToPage = (page: number) => {
     if (page === currentPage || page < 1 || page > totalPages) return;
 
-    setDirection(page > currentPage ? 1 : -1);
     setCurrentPage(page);
-    requestAnimationFrame(scrollToGrid);
-  };
-
-  const pageVariants = {
-    initial: (dir: number) => ({
-      opacity: 0,
-      y: 28,
-      x: dir > 0 ? 40 : -40,
-    }),
-    animate: {
-      opacity: 1,
-      y: 0,
-      x: 0,
-      transition: {
-        duration: 0.55,
-        ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
-        staggerChildren: 0.08,
-      },
-    },
-    exit: (dir: number) => ({
-      opacity: 0,
-      y: -18,
-      x: dir > 0 ? -40 : 40,
-      transition: {
-        duration: 0.38,
-        ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
-        staggerChildren: 0.05,
-        staggerDirection: -1,
-      },
-    }),
-  };
-
-  const cardVariants = {
-    initial: (dir: number) => ({
-      opacity: 0,
-      y: 24,
-      x: dir > 0 ? 24 : -24,
-      filter: "blur(8px)",
-    }),
-    animate: {
-      opacity: 1,
-      y: 0,
-      x: 0,
-      filter: "blur(0px)",
-      transition: {
-        duration: 0.5,
-        ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
-      },
-    },
-    exit: (dir: number) => ({
-      opacity: 0,
-      y: -16,
-      x: dir > 0 ? -24 : 24,
-      filter: "blur(6px)",
-      transition: {
-        duration: 0.3,
-        ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
-      },
-    }),
   };
 
   return (
@@ -658,10 +555,15 @@ export default function ProjectsSection() {
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(40,255,140,0.06),transparent_22%),radial-gradient(circle_at_80%_35%,rgba(0,180,255,0.05),transparent_22%),linear-gradient(180deg,#050505_0%,#081010_100%)]" />
       <div className="pointer-events-none absolute inset-0 opacity-[0.03] bg-[linear-gradient(rgba(255,255,255,0.14)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.14)_1px,transparent_1px)] bg-size-[28px_28px]" />
 
-      <div className="relative flex max-w-5xl flex-col items-center px-4 text-center sm:px-6">
+      <InView
+        variants={revealVariants.blurUp}
+        className="relative flex max-w-5xl flex-col items-center px-4 text-center sm:px-6"
+      >
         <div className="flex w-full flex-col items-center gap-3 lg:gap-4">
           <div className="flex flex-col items-center gap-0.5 font-quantico font-bold leading-[1.2]">
-            <p className="font-quantico text-sm font-bold uppercase tracking-[0.22em] text-white/55">PROJECTS</p>
+            <p className="font-quantico text-sm font-bold uppercase tracking-[0.22em] text-white/55">
+              PROJECTS
+            </p>
             <h2 className="bg-linear-to-b from-lime-300 via-lime-400 to-lime-500 bg-clip-text text-center font-quantico text-3xl tracking-tight text-transparent sm:text-4xl lg:text-5xl xl:text-6xl">
               Explore What I Build
             </h2>
@@ -672,9 +574,12 @@ export default function ProjectsSection() {
             mudah dilihat: Web App, FiveM, dan Bot.
           </p>
         </div>
-      </div>
+      </InView>
 
-      <div className="relative flex flex-wrap items-center justify-center gap-3 px-6">
+      <InView
+        variants={revealVariants.fadeUp}
+        className="relative flex flex-wrap items-center justify-center gap-3 px-6"
+      >
         {categories.map((category) => (
           <FilterButton
             key={category}
@@ -683,44 +588,46 @@ export default function ProjectsSection() {
             onClick={() => handleCategoryChange(category)}
           />
         ))}
-      </div>
+      </InView>
 
       <div ref={gridRef} className="relative w-full max-w-7xl px-8 sm:px-10">
-        <AnimatePresence mode="wait" custom={direction}>
-          <motion.div
-            key={`${activeCategory}-${currentPage}`}
-            custom={direction}
-            variants={pageVariants}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-            className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3 lg:gap-8"
+        <InView variants={revealVariants.fadeUp}>
+          <Carousel
+            key={activeCategory}
+            index={currentPage - 1}
+            onIndexChange={(index) => setCurrentPage(index + 1)}
+            ariaLabel={`${activeCategory} projects`}
           >
-            {paginatedProjects.map((project) => (
-              <motion.div
-                key={`${activeCategory}-${currentPage}-${project.title}`}
-                custom={direction}
-                variants={cardVariants}
-                initial="initial"
-                animate="animate"
-                exit="exit"
-                layout
-              >
-                <ProjectCard {...project} />
-              </motion.div>
-            ))}
-          </motion.div>
-        </AnimatePresence>
+            <CarouselContent transition={projectCarouselTransition}>
+              {projectPages.map((pageProjects, pageIndex) => (
+                <CarouselItem
+                  key={`${activeCategory}-${pageIndex}`}
+                  index={pageIndex}
+                  className="basis-full pr-6"
+                >
+                  <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:gap-8 xl:grid-cols-3">
+                    {pageProjects.map((project) => (
+                      <ProjectCard key={project.title} {...project} />
+                    ))}
+                  </div>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+          </Carousel>
+        </InView>
       </div>
 
       {totalPages > 1 && (
-        <div className="relative flex items-center gap-5">
+        <InView
+          variants={revealVariants.fadeUp}
+          className="relative flex items-center gap-5"
+        >
           <PaginationButton
             ariaLabel="Previous page"
             onClick={() => goToPage(currentPage - 1)}
             disabled={currentPage === 1}
           >
-            <ArrowLeft className="size-4" strokeWidth={2.5} />
+            <FiArrowLeft className="size-4" strokeWidth={2.5} />
           </PaginationButton>
 
           <div className="flex items-center gap-3">
@@ -733,32 +640,16 @@ export default function ProjectsSection() {
                   key={page}
                   aria-label={`Go to page ${page}`}
                   aria-current={isActive ? "page" : undefined}
-                  className="group relative flex h-4 items-center justify-center"
+                  className="group relative flex h-6 w-8 items-center justify-center"
                   type="button"
                   onClick={() => goToPage(page)}
                 >
                   <span
-                    className={`absolute transition-all duration-300 ${
+                    className={`block h-1.5 rounded-full transition-[width,background-color] duration-300 ${
                       isActive
-                        ? "h-4 w-10 bg-linear-to-r from-lime-300 via-lime-400 to-cyan-400 opacity-100 blur-[10px]"
-                        : "h-3 w-3 bg-white/20 opacity-0 blur-[6px] group-hover:opacity-100"
+                        ? "w-7 bg-lime-300"
+                        : "w-1.5 bg-white/25 group-hover:bg-white/45"
                     }`}
-                    style={{
-                      clipPath:
-                        "polygon(6px 0,100% 0,100% calc(100% - 6px),calc(100% - 6px) 100%,0 100%,0 6px)",
-                    }}
-                    aria-hidden="true"
-                  />
-                  <span
-                    className={`relative transition-all duration-300 ${
-                      isActive
-                        ? "h-3 w-8 bg-linear-to-r from-lime-300 via-lime-400 to-cyan-400 shadow-[0_0_14px_rgba(181,255,89,0.55)]"
-                        : "h-2.5 w-2.5 bg-white/15 group-hover:bg-white/35"
-                    }`}
-                    style={{
-                      clipPath:
-                        "polygon(6px 0,100% 0,100% calc(100% - 6px),calc(100% - 6px) 100%,0 100%,0 6px)",
-                    }}
                   />
                 </button>
               );
@@ -770,9 +661,9 @@ export default function ProjectsSection() {
             onClick={() => goToPage(currentPage + 1)}
             disabled={currentPage === totalPages}
           >
-            <ArrowRight className="size-4" strokeWidth={2.5} />
+            <FiArrowRight className="size-4" strokeWidth={2.5} />
           </PaginationButton>
-        </div>
+        </InView>
       )}
     </section>
   );

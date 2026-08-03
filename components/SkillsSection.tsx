@@ -1,5 +1,7 @@
 import Image from "next/image";
 
+import { InView, InViewItem, InViewGroup } from "@/components/motion-primitives/in-view";
+
 const skills = [
   {
     name: "Next.js",
@@ -167,7 +169,7 @@ export default function SkillsSection() {
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(40,255,140,0.06),transparent_22%),radial-gradient(circle_at_80%_35%,rgba(0,180,255,0.05),transparent_22%),linear-gradient(180deg,#050505_0%,#081010_100%)]" />
       <div className="pointer-events-none absolute inset-0 opacity-[0.03] bg-[linear-gradient(rgba(255,255,255,0.14)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.14)_1px,transparent_1px)] bg-size-[28px_28px]" />
 
-      <div className="relative flex max-w-5xl flex-col items-center px-4 text-center sm:px-6">
+      <InView className="relative flex max-w-5xl flex-col items-center px-4 text-center sm:px-6">
         <div className="flex w-full flex-col items-center gap-3 lg:gap-4">
           <div className="flex flex-col items-center gap-0.5 font-quantico font-bold leading-[1.2]">
             <p className="text-sm tracking-tight text-white">SKILLS</p>
@@ -182,13 +184,15 @@ export default function SkillsSection() {
             scalable, dan menarik secara visual.
           </p>
         </div>
-      </div>
+      </InView>
 
-      <div className="relative mx-auto grid w-full max-w-7xl grid-cols-1 gap-6 px-8 sm:grid-cols-2 sm:px-10 xl:grid-cols-4 lg:gap-8">
+      <InViewGroup className="relative mx-auto grid w-full max-w-7xl grid-cols-1 gap-6 px-8 sm:grid-cols-2 sm:px-10 xl:grid-cols-4 lg:gap-8">
         {skills.map((skill) => (
-          <SkillCard key={skill.name} {...skill} />
+          <InViewItem key={skill.name}>
+            <SkillCard {...skill} />
+          </InViewItem>
         ))}
-      </div>
+      </InViewGroup>
     </section>
   );
 }

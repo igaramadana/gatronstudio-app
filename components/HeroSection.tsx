@@ -4,99 +4,20 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { GitHubLogoIcon, LinkedInLogoIcon } from "@radix-ui/react-icons";
-import { Mouse } from "lucide-react";
+import { FiChevronsDown } from "react-icons/fi";
+import { FaGithub, FaLinkedinIn } from "react-icons/fa6";
 
-const containerVariants = {
-  hidden: {},
-  visible: {
-    transition: {
-      staggerChildren: 0.12,
-      delayChildren: 0.15,
-    },
-  },
-};
+import ChamferButton from "@/components/ui/ChamferButton";
+import { useHydratedReducedMotion } from "@/lib/hooks/useHydratedReducedMotion";
+import { usePageReady } from "@/lib/hooks/usePageReady";
+import {
+  heroImageVariants,
+  heroStaggerContainer,
+  revealVariants,
+} from "@/lib/motion";
+import { siteConfig } from "@/lib/site";
 
-const itemVariants = {
-  hidden: {
-    opacity: 0,
-    y: 30,
-    filter: "blur(10px)",
-  },
-  visible: {
-    opacity: 1,
-    y: 0,
-    filter: "blur(0px)",
-    transition: {
-      duration: 0.8,
-      ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
-    },
-  },
-};
-
-const imageVariants = {
-  hidden: {
-    opacity: 0,
-    y: 40,
-    scale: 0.94,
-    filter: "blur(12px)",
-  },
-  visible: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    filter: "blur(0px)",
-    transition: {
-      duration: 1,
-      ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
-      delay: 0.25,
-    },
-  },
-};
-
-function HeroButton({
-  href,
-  children,
-  primary = false,
-}: {
-  href: string;
-  children: React.ReactNode;
-  primary?: boolean;
-}) {
-  return (
-    <Link
-      href={href}
-      className={`group relative inline-flex shrink-0 items-center justify-center px-5 py-2.5 lg:px-6 lg:py-3 transition-transform duration-150 active:scale-[0.97] ${
-        primary ? "drop-shadow-[0_0_24px_rgba(181,255,89,0.25)]" : ""
-      }`}
-    >
-      <span
-        className={`absolute inset-0 [clip-path:polygon(12px_0,100%_0,100%_calc(100%-12px),calc(100%-12px)_100%,0_100%,0_12px)] transition-all duration-300 ${
-          primary
-            ? "bg-[#283222] group-hover:brightness-150"
-            : "bg-[#0C0F14] group-hover:brightness-125"
-        }`}
-        aria-hidden="true"
-      />
-      <span
-        className={`absolute inset-0 [clip-path:polygon(12px_0,100%_0,100%_calc(100%-12px),calc(100%-12px)_100%,0_100%,0_12px)] p-px ${
-          primary ? "bg-lime-400" : "bg-white/30 group-hover:bg-lime-400"
-        }`}
-        aria-hidden="true"
-      >
-        <span
-          className={`block h-full w-full [clip-path:polygon(12px_0,100%_0,100%_calc(100%-12px),calc(100%-12px)_100%,0_100%,0_12px)] ${
-            primary ? "bg-[#283222]" : "bg-[#0C0F14]"
-          }`}
-        />
-      </span>
-
-      <span className="relative font-quantico text-sm uppercase leading-none text-white transition-all duration-300 group-hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.25)] lg:text-[1.05rem]">
-        {children}
-      </span>
-    </Link>
-  );
-}
+const ROLES = ["FiveM Developer", "Web Developer"] as const;
 
 function SocialLink({
   href,
@@ -123,6 +44,7 @@ function SocialLink({
       <Link
         href={href}
         target="_blank"
+        rel="noopener noreferrer"
         aria-label={label}
         className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white backdrop-blur-sm transition-all duration-200 hover:scale-110 hover:border-lime-300/40 hover:text-lime-300"
       >
@@ -191,7 +113,7 @@ function ScrollIndicator() {
           transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
           className="relative flex items-center justify-center text-lime-300 drop-shadow-[0_0_10px_rgba(163,230,53,0.45)]"
         >
-          <Mouse size={20} strokeWidth={1.8} />
+          <FiChevronsDown size={20} strokeWidth={1.8} />
         </motion.div>
 
         <div className="relative flex h-8 items-center justify-center overflow-visible">
@@ -205,18 +127,17 @@ function ScrollIndicator() {
 }
 
 export default function HeroSection() {
-  const roles = [
-    "FiveM Developer",
-    "Web Developer",
-  ];
-
+  const shouldReduceMotion = useHydratedReducedMotion();
+  const isPageReady = usePageReady();
   const [roleIndex, setRoleIndex] = useState(0);
   const [displayedRole, setDisplayedRole] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
   const [isWaiting, setIsWaiting] = useState(false);
 
   useEffect(() => {
-    const currentRole = roles[roleIndex];
+    const currentRole = ROLES[roleIndex];
+
+    if (shouldReduceMotion) return;
 
     if (isWaiting) {
       const waitTimer = setTimeout(() => {
@@ -243,20 +164,21 @@ export default function HeroSection() {
 
         if (nextText.length === 0) {
           setIsDeleting(false);
-          setRoleIndex((prev) => (prev + 1) % roles.length);
+          setRoleIndex((prev) => (prev + 1) % ROLES.length);
         }
       }
     }, typingSpeed);
 
     return () => clearTimeout(timer);
-  }, [displayedRole, isDeleting, isWaiting, roleIndex, roles]);
+  }, [displayedRole, isDeleting, isWaiting, roleIndex, shouldReduceMotion]);
+
+  const visibleRole = shouldReduceMotion ? ROLES[0] : displayedRole;
 
   return (
     <section className="relative mt-[140px] w-full px-6 pb-6 sm:px-8 lg:px-10">
       <motion.div
         initial={{ opacity: 0, y: 36 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.2 }}
+        animate={isPageReady ? { opacity: 1, y: 0 } : { opacity: 0, y: 36 }}
         transition={{
           duration: 0.9,
           ease: [0.22, 1, 0.36, 1],
@@ -294,19 +216,18 @@ export default function HeroSection() {
 
           <div className="relative z-10 grid min-h-[760px] items-end gap-10 px-4 py-8 sm:px-6 lg:min-h-[78vh] lg:grid-cols-[1.1fr_0.9fr] lg:px-12 lg:py-0">
             <motion.div
-              variants={containerVariants}
+              variants={heroStaggerContainer}
               initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.25 }}
+              animate={isPageReady ? "visible" : "hidden"}
               className="flex items-end lg:h-full lg:pb-16"
             >
               <div className="flex max-w-3xl flex-col items-start gap-4 sm:gap-6 lg:gap-8">
                 <motion.div
-                  variants={itemVariants}
+                  variants={revealVariants.blurUp}
                   className="flex flex-col items-start gap-2 sm:gap-3 lg:gap-4"
                 >
                   <motion.h1
-                    variants={itemVariants}
+                    variants={revealVariants.blurUp}
                     className="max-w-4xl font-quantico text-3xl font-bold uppercase leading-none tracking-tight text-white sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl"
                   >
                     Halo, saya <br />
@@ -316,17 +237,17 @@ export default function HeroSection() {
                   </motion.h1>
 
                   <motion.div
-                    variants={itemVariants}
+                    variants={revealVariants.blurUp}
                     className="min-h-[2rem] lg:min-h-[2.5rem]"
                   >
                     <p className="font-quantico text-base uppercase tracking-[0.18em] text-lime-300 sm:text-lg lg:text-2xl">
-                      {displayedRole}
+                      {visibleRole}
                       <span className="ml-1 inline-block h-[1em] w-[3px] translate-y-[2px] animate-pulse bg-lime-400 align-baseline" />
                     </p>
                   </motion.div>
 
                   <motion.p
-                    variants={itemVariants}
+                    variants={revealVariants.blurUp}
                     className="max-w-2xl text-sm leading-[1.7] text-white/72 lg:text-lg"
                   >
                     Saya adalah seorang Web Developer dan FiveM Developer,
@@ -338,42 +259,41 @@ export default function HeroSection() {
                 </motion.div>
 
                 <motion.div
-                  variants={itemVariants}
+                  variants={revealVariants.blurUp}
                   className="flex flex-wrap items-start gap-3 sm:gap-4"
                 >
-                  <HeroButton href="#about">About Me</HeroButton>
-                  <HeroButton href="#projects" primary>
-                    Download CV
-                  </HeroButton>
+                  <ChamferButton href="#about">About Me</ChamferButton>
+                  <ChamferButton href="#projects" variant="primary">
+                    View Projects
+                  </ChamferButton>
                 </motion.div>
 
                 <motion.div
-                  variants={itemVariants}
+                  variants={revealVariants.blurUp}
                   className="hidden items-center gap-3 pt-2 lg:flex"
                 >
                   <SocialLink
-                    href="https://github.com/igaramadana"
+                    href={siteConfig.social.github}
                     label="GitHub"
                     index={0}
                   >
-                    <GitHubLogoIcon className="h-5 w-5" />
+                    <FaGithub className="h-5 w-5" />
                   </SocialLink>
                   <SocialLink
-                    href="https://linkedin.com"
+                    href={siteConfig.social.linkedin}
                     label="LinkedIn"
                     index={1}
                   >
-                    <LinkedInLogoIcon className="h-5 w-5" />
+                    <FaLinkedinIn className="h-5 w-5" />
                   </SocialLink>
                 </motion.div>
               </div>
             </motion.div>
 
             <motion.div
-              variants={imageVariants}
+              variants={heroImageVariants}
               initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.25 }}
+              animate={isPageReady ? "visible" : "hidden"}
               className="relative hidden h-full items-end justify-end lg:flex"
             >
               <div className="relative w-[400px] xl:w-[500px] 2xl:w-[560px]">
@@ -383,14 +303,18 @@ export default function HeroSection() {
                 <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#050505] via-[#050505]/70 to-transparent" />
 
                 <motion.div
-                  animate={{ y: [0, -6, 0] }}
-                  transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+                  animate={shouldReduceMotion ? undefined : { y: [0, -6, 0] }}
+                  transition={
+                    shouldReduceMotion
+                      ? undefined
+                      : { duration: 6, repeat: Infinity, ease: "easeInOut" }
+                  }
                 >
                   <Image
-                    src="/images/iga.png"
-                    alt="Wajahku"
-                    width={1000}
-                    height={1600}
+                    src="/images/iga.webp"
+                    alt="Iga Ramadana Sahputra"
+                    width={1024}
+                    height={1154}
                     priority
                     className="relative z-10 h-auto w-full object-contain drop-shadow-[0_20px_80px_rgba(0,0,0,0.75)]"
                   />
@@ -401,8 +325,11 @@ export default function HeroSection() {
 
           <motion.div
             initial={{ opacity: 0, y: 24, scale: 0.96 }}
-            whileInView={{ opacity: 1, y: 0, scale: 1 }}
-            viewport={{ once: true, amount: 0.3 }}
+            animate={
+              isPageReady
+                ? { opacity: 1, y: 0, scale: 1 }
+                : { opacity: 0, y: 24, scale: 0.96 }
+            }
             transition={{
               duration: 0.9,
               delay: 0.25,
@@ -413,10 +340,10 @@ export default function HeroSection() {
             <div className="relative mx-auto mt-2 w-[280px] sm:w-[340px]">
               <div className="absolute inset-x-6 bottom-6 h-24 rounded-full bg-lime-400/20 blur-[60px]" />
               <Image
-                src="/images/iga.png"
-                alt="Wajahku"
-                width={1000}
-                height={1600}
+                src="/images/iga.webp"
+                alt="Iga Ramadana Sahputra"
+                width={1024}
+                height={1154}
                 priority
                 className="relative z-10 h-auto w-full object-contain opacity-95 drop-shadow-[0_20px_50px_rgba(0,0,0,0.7)]"
               />

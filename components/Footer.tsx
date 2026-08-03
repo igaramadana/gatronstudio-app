@@ -3,38 +3,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import {
-  GitHubLogoIcon,
-  LinkedInLogoIcon,
-  InstagramLogoIcon,
-} from "@radix-ui/react-icons";
+import { FaGithub, FaInstagram, FaLinkedinIn } from "react-icons/fa6";
 
-const containerVariants = {
-  hidden: {},
-  visible: {
-    transition: {
-      staggerChildren: 0.14,
-      delayChildren: 0.1,
-    },
-  },
-};
-
-const itemVariants = {
-  hidden: {
-    opacity: 0,
-    y: 32,
-    filter: "blur(10px)",
-  },
-  visible: {
-    opacity: 1,
-    y: 0,
-    filter: "blur(0px)",
-    transition: {
-      duration: 0.75,
-      ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
-    },
-  },
-};
+import { InViewGroup, InViewItem } from "@/components/motion-primitives/in-view";
+import { revealVariants } from "@/lib/motion";
+import { siteConfig } from "@/lib/site";
 
 function HexPattern() {
   return (
@@ -120,16 +93,7 @@ function FooterTextLink({
 
 export default function Footer() {
   return (
-    <motion.footer
-      initial={{ opacity: 0, y: 50 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.15 }}
-      transition={{
-        duration: 0.9,
-        ease: [0.22, 1, 0.36, 1],
-      }}
-      className="relative overflow-hidden bg-[#0d1113] py-10 lg:py-16"
-    >
+    <footer className="relative overflow-hidden bg-[#0d1113] py-10 lg:py-16">
       <motion.div
         initial={{ opacity: 0, scale: 0.92 }}
         whileInView={{ opacity: 1, scale: 1 }}
@@ -158,15 +122,12 @@ export default function Footer() {
         className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.14)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.14)_1px,transparent_1px)] bg-size-[28px_28px]"
       />
 
-      <motion.div
-        variants={containerVariants}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.15 }}
+      <InViewGroup
+        stagger={0.12}
         className="relative mx-auto flex max-w-7xl flex-col items-center gap-8 px-8 sm:px-10 lg:flex-row lg:items-start lg:justify-between"
       >
-        <motion.div
-          variants={itemVariants}
+        <InViewItem
+          variants={revealVariants.fadeRight}
           className="flex flex-col items-center gap-6 lg:items-start lg:gap-8"
         >
           <motion.div
@@ -175,8 +136,8 @@ export default function Footer() {
             className="relative h-10 w-[10rem] lg:h-14 lg:w-[14rem]"
           >
             <Image
-              src="/images/logo.png"
-              alt="Logo"
+              src="/images/logo.webp"
+              alt="Gatrons Studio"
               fill
               className="object-contain object-left"
               sizes="(max-width: 1024px) 160px, 224px"
@@ -184,30 +145,30 @@ export default function Footer() {
           </motion.div>
 
           <motion.p
-            variants={itemVariants}
+            variants={revealVariants.blurUp}
             className="max-w-[35rem] text-center font-quantico text-base leading-[1.6] text-white/60 lg:text-left lg:text-lg"
           >
             Saya membangun website modern, portfolio, dan aplikasi web yang
             clean, cepat, dan scalable. Kalau kamu punya visi yang sama untuk
             project digitalmu, mari bangun sesuatu yang keren bersama.{" "}
             <a
-              href="mailto:atherosmurf@gmail.com"
+              href={`mailto:${siteConfig.author.email}`}
               className="group relative inline text-white no-underline"
             >
               <span className="relative transition-colors duration-200 group-hover:text-lime-300">
-                igrmdns085@gmail.com
+                {siteConfig.author.email}
               </span>
               <span className="absolute bottom-0 left-0 h-px w-0 bg-lime-400 transition-all duration-300 group-hover:w-full" />
             </a>
           </motion.p>
-        </motion.div>
+        </InViewItem>
 
-        <motion.div
-          variants={itemVariants}
+        <InViewItem
+          variants={revealVariants.fadeLeft}
           className="flex flex-col items-center justify-between gap-6 self-stretch lg:items-start lg:gap-8"
         >
           <motion.div
-            variants={itemVariants}
+            variants={revealVariants.blurUp}
             className="flex flex-col items-center gap-4 lg:items-start"
           >
             <p className="font-quantico text-base leading-[1.5] text-white/55 lg:text-xl">
@@ -216,33 +177,33 @@ export default function Footer() {
 
             <div className="flex items-center gap-[1.125rem]">
               <SocialIconLink
-                href="https://github.com/igaramadana"
+                href={siteConfig.social.github}
                 label="GitHub"
                 index={0}
               >
-                <GitHubLogoIcon className="h-5 w-5" />
+                <FaGithub className="h-5 w-5" />
               </SocialIconLink>
 
               <SocialIconLink
-                href="https://www.linkedin.com/in/iga-ramadana-sahputra-5797b9287?utm_source=share_via&utm_content=profile&utm_medium=member_android"
+                href={siteConfig.social.linkedin}
                 label="LinkedIn"
                 index={1}
               >
-                <LinkedInLogoIcon className="h-5 w-5" />
+                <FaLinkedinIn className="h-5 w-5" />
               </SocialIconLink>
 
               <SocialIconLink
-                href="https://instagram.com/igarmdna"
+                href={siteConfig.social.instagram}
                 label="Instagram"
                 index={2}
               >
-                <InstagramLogoIcon className="h-5 w-5" />
+                <FaInstagram className="h-5 w-5" />
               </SocialIconLink>
             </div>
           </motion.div>
 
           <motion.div
-            variants={itemVariants}
+            variants={revealVariants.blurUp}
             className="flex flex-wrap items-center justify-center gap-4 font-quantico text-base leading-normal text-white/55 lg:justify-start lg:gap-6 lg:text-lg"
           >
             <FooterTextLink href="/terms">Terms & Conditions</FooterTextLink>
@@ -250,13 +211,13 @@ export default function Footer() {
           </motion.div>
 
           <motion.p
-            variants={itemVariants}
+            variants={revealVariants.blurUp}
             className="text-center font-quantico text-base leading-normal text-white/55 lg:text-left lg:text-lg"
           >
             © 2026 Iga Ramadana Sahputra. All rights reserved.
           </motion.p>
-        </motion.div>
-      </motion.div>
-    </motion.footer>
+        </InViewItem>
+      </InViewGroup>
+    </footer>
   );
 }

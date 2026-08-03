@@ -1,18 +1,15 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { AnimatePresence, motion, type Variants } from "framer-motion";
+import {
+  AnimatePresence,
+  motion,
+  type Variants,
+} from "framer-motion";
 
-const words = [
-  "Hello",
-  "Bonjour",
-  "Ciao",
-  "Olá",
-  "やあ",
-  "Hallå",
-  "Guten Tag",
-  "Hallo",
-];
+import { useHydratedReducedMotion } from "@/lib/hooks/useHydratedReducedMotion";
+
+const words = ["Hello", "Bonjour", "Olá", "Hallo"] as const;
 
 const EASE: [number, number, number, number] = [0.76, 0, 0.24, 1];
 
@@ -23,8 +20,8 @@ const opacity: Variants = {
   enter: {
     opacity: 0.75,
     transition: {
-      duration: 0.8,
-      delay: 0.2,
+      duration: 0.45,
+      delay: 0.05,
     },
   },
 };
@@ -36,9 +33,9 @@ const slideUp: Variants = {
   exit: {
     y: "-100%",
     transition: {
-      duration: 0.9,
+      duration: 0.7,
       ease: EASE,
-      delay: 0.2,
+      delay: 0.1,
     },
   },
 };
@@ -48,12 +45,27 @@ type PreloaderProps = {
 };
 
 export default function Preloader({ onFinish }: PreloaderProps) {
+  const shouldReduceMotion = useHydratedReducedMotion();
   const [index, setIndex] = useState(0);
   const [isVisible, setIsVisible] = useState(true);
   const [dimension, setDimension] = useState({
     width: 0,
     height: 0,
   });
+
+  useEffect(() => {
+    const root = document.documentElement;
+    root.classList.add("is-preloading");
+
+    return () => root.classList.remove("is-preloading");
+  }, []);
+
+  useEffect(() => {
+    if (shouldReduceMotion) {
+      const timer = window.setTimeout(() => setIsVisible(false), 250);
+      return () => window.clearTimeout(timer);
+    }
+  }, [shouldReduceMotion]);
 
   useEffect(() => {
     const updateSize = () => {
@@ -70,20 +82,22 @@ export default function Preloader({ onFinish }: PreloaderProps) {
   }, []);
 
   useEffect(() => {
+    if (shouldReduceMotion) return;
+
     if (index === words.length - 1) {
       const finishTimer = setTimeout(() => {
         setIsVisible(false);
-      }, 500);
+      }, 220);
 
       return () => clearTimeout(finishTimer);
     }
 
     const timer = setTimeout(() => {
       setIndex((prev) => prev + 1);
-    }, index === 0 ? 1000 : 150);
+    }, index === 0 ? 520 : 110);
 
     return () => clearTimeout(timer);
-  }, [index]);
+  }, [index, shouldReduceMotion]);
 
   const initialPath = useMemo(() => {
     return `M0 0 L${dimension.width} 0 L${dimension.width} ${dimension.height} Q${
@@ -101,14 +115,14 @@ export default function Preloader({ onFinish }: PreloaderProps) {
     initial: {
       d: initialPath,
       transition: {
-        duration: 0.7,
+        duration: 0.55,
         ease: EASE,
       },
     },
     exit: {
       d: targetPath,
       transition: {
-        duration: 0.7,
+        duration: 0.55,
         ease: EASE,
         delay: 0.3,
       },
@@ -117,11 +131,14 @@ export default function Preloader({ onFinish }: PreloaderProps) {
 
   return (
     <AnimatePresence mode="wait" onExitComplete={onFinish}>
-      {isVisible && dimension.width > 0 && (
+      {isVisible && (
         <motion.div
           variants={slideUp}
           initial="initial"
           exit="exit"
+          role="status"
+          aria-live="polite"
+          aria-label="Memuat Gatrons Studio"
           className="fixed inset-0 z-[9999] flex items-center justify-center overflow-hidden bg-[#050505] text-white"
         >
           <motion.p
@@ -134,14 +151,16 @@ export default function Preloader({ onFinish }: PreloaderProps) {
             {words[index]}
           </motion.p>
 
-          <svg className="pointer-events-none absolute left-0 top-0 h-[calc(100%+300px)] w-full">
-            <motion.path
-              variants={curve}
-              initial="initial"
-              exit="exit"
-              fill="#050505"
-            />
-          </svg>
+          {dimension.width > 0 && (
+            <svg className="pointer-events-none absolute left-0 top-0 h-[calc(100%+300px)] w-full">
+              <motion.path
+                variants={curve}
+                initial="initial"
+                exit="exit"
+                fill="#050505"
+              />
+            </svg>
+          )}
         </motion.div>
       )}
     </AnimatePresence>

@@ -1,69 +1,16 @@
 import Link from "next/link";
-import { Mail, ArrowUpRight } from "lucide-react";
-import {
-  GitHubLogoIcon,
-  LinkedInLogoIcon,
-  InstagramLogoIcon,
-} from "@radix-ui/react-icons";
+import { FiArrowUpRight, FiMail } from "react-icons/fi";
+import { FaGithub, FaInstagram, FaLinkedinIn } from "react-icons/fa6";
 
-function ContactButton({
-  href,
-  children,
-  primary = false,
-  external = false,
-}: {
-  href: string;
-  children: React.ReactNode;
-  primary?: boolean;
-  external?: boolean;
-}) {
-  return (
-    <Link
-      href={href}
-      target={external ? "_blank" : undefined}
-      rel={external ? "noopener noreferrer" : undefined}
-      className={`group relative inline-flex shrink-0 items-center justify-center px-5 py-2.5 transition-transform duration-150 active:scale-[0.97] lg:px-6 lg:py-3 ${
-        primary ? "drop-shadow-[0_0_24px_rgba(181,255,89,0.2)]" : ""
-      }`}
-    >
-      <span
-        className={`absolute inset-0 [clip-path:polygon(12px_0,100%_0,100%_calc(100%-12px),calc(100%-12px)_100%,0_100%,0_12px)] transition-all duration-300 ${
-          primary
-            ? "bg-[#283222] group-hover:brightness-150"
-            : "bg-[#0C0F14] group-hover:bg-[#11161d]"
-        }`}
-        aria-hidden="true"
-      />
-
-      <span
-        className={`absolute inset-0 [clip-path:polygon(12px_0,100%_0,100%_calc(100%-12px),calc(100%-12px)_100%,0_100%,0_12px)] p-px transition-all duration-300 ${
-          primary
-            ? "bg-lime-400"
-            : "bg-white/25 group-hover:bg-lime-400"
-        }`}
-        aria-hidden="true"
-      >
-        <span
-          className={`block h-full w-full [clip-path:polygon(12px_0,100%_0,100%_calc(100%-12px),calc(100%-12px)_100%,0_100%,0_12px)] ${
-            primary ? "bg-[#283222]" : "bg-[#0C0F14]"
-          }`}
-        />
-      </span>
-
-      <span className="relative inline-flex items-center gap-2 font-quantico text-sm uppercase leading-none text-white transition-all duration-300 group-hover:text-white/90 lg:text-[1.02rem]">
-        {children}
-      </span>
-    </Link>
-  );
-}
+import { InView, InViewItem, InViewGroup } from "@/components/motion-primitives/in-view";
+import ChamferButton from "@/components/ui/ChamferButton";
+import { siteConfig } from "@/lib/site";
 
 function SocialIconBadge({
-  href,
   label,
   accent = "lime",
   children,
 }: {
-  href: string;
   label: string;
   accent?: "lime" | "cyan" | "pink";
   children: React.ReactNode;
@@ -76,15 +23,13 @@ function SocialIconBadge({
         : "group-hover:border-pink-400/40 group-hover:text-pink-300";
 
   return (
-    <Link
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      aria-label={label}
-      className={`group flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white backdrop-blur-sm transition-all duration-200 hover:scale-110 ${accentClass}`}
+    <span
+      aria-hidden="true"
+      title={label}
+      className={`flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white backdrop-blur-sm transition-all duration-200 group-hover:scale-110 ${accentClass}`}
     >
       {children}
-    </Link>
+    </span>
   );
 }
 
@@ -115,11 +60,13 @@ function ContactCard({
         ? "from-cyan-300/70 via-cyan-400/20 to-transparent"
         : "from-pink-300/70 via-pink-400/20 to-transparent";
 
+  const isExternal = href.startsWith("http");
+
   return (
     <Link
       href={href}
-      target="_blank"
-      rel="noopener noreferrer"
+      target={isExternal ? "_blank" : undefined}
+      rel={isExternal ? "noopener noreferrer" : undefined}
       className="group relative flex min-h-[180px] w-full flex-col justify-between overflow-hidden p-5 transition-transform duration-300 hover:-translate-y-1 lg:min-h-[220px] lg:p-6"
     >
       <div
@@ -161,7 +108,7 @@ function ContactCard({
             </div>
           </div>
 
-          <ArrowUpRight className="size-5 text-white/45 transition-all duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-white/90" />
+          <FiArrowUpRight className="size-5 text-white/45 transition-all duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-white/90" />
         </div>
 
         <div className="flex flex-col gap-2">
@@ -186,7 +133,7 @@ export default function ContactSection() {
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(40,255,140,0.06),transparent_22%),radial-gradient(circle_at_80%_35%,rgba(0,180,255,0.05),transparent_22%),linear-gradient(180deg,#050505_0%,#081010_100%)]" />
       <div className="pointer-events-none absolute inset-0 opacity-[0.03] bg-[linear-gradient(rgba(255,255,255,0.14)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.14)_1px,transparent_1px)] bg-size-[28px_28px]" />
 
-      <div className="relative flex max-w-5xl flex-col items-center px-4 text-center sm:px-6">
+      <InView className="relative flex max-w-5xl flex-col items-center px-4 text-center sm:px-6">
         <div className="flex w-full flex-col items-center gap-3 lg:gap-4">
           <div className="flex flex-col items-center gap-0.5 font-quantico font-bold leading-[1.2]">
             <p className="text-sm tracking-tight text-white">CONTACT</p>
@@ -201,103 +148,107 @@ export default function ContactSection() {
             ini.
           </p>
         </div>
-      </div>
+      </InView>
 
-      <div className="relative mx-auto grid w-full max-w-5xl grid-cols-1 gap-6 px-8 sm:px-10 md:grid-cols-2 lg:gap-8">
-        <ContactCard
+      <InViewGroup className="relative mx-auto grid w-full max-w-5xl grid-cols-1 gap-6 px-8 sm:px-10 md:grid-cols-2 lg:gap-8">
+        <InViewItem>
+          <ContactCard
           label="Email"
-          value="igrmdns085@gmail.com"
-          href="mailto:igrmdns085@gmail.com"
+          value={siteConfig.author.email}
+          href={`mailto:${siteConfig.author.email}`}
           accent="lime"
           icon={
             <SocialIconBadge
-              href="mailto:igrmdns085@gmail.com"
               label="Email"
               accent="lime"
             >
-              <Mail className="size-5" strokeWidth={2.2} />
+              <FiMail className="size-5" strokeWidth={2.2} />
             </SocialIconBadge>
           }
-        />
+          />
+        </InViewItem>
 
-        <ContactCard
+        <InViewItem>
+          <ContactCard
           label="GitHub"
           value="github.com/igaramadana"
-          href="https://github.com/igaramadana"
+          href={siteConfig.social.github}
           accent="cyan"
           icon={
             <SocialIconBadge
-              href="https://github.com/igaramadana"
               label="GitHub"
               accent="cyan"
             >
-              <GitHubLogoIcon className="h-5 w-5" />
+              <FaGithub className="h-5 w-5" />
             </SocialIconBadge>
           }
-        />
+          />
+        </InViewItem>
 
-        <ContactCard
+        <InViewItem>
+          <ContactCard
           label="LinkedIn"
           value="linkedin.com/in/igaramadana"
-          href="https://www.linkedin.com/in/iga-ramadana-sahputra-5797b9287?utm_source=share_via&utm_content=profile&utm_medium=member_android"
+          href={siteConfig.social.linkedin}
           accent="cyan"
           icon={
             <SocialIconBadge
-              href="https://www.linkedin.com/in/iga-ramadana-sahputra-5797b9287?utm_source=share_via&utm_content=profile&utm_medium=member_android"
               label="LinkedIn"
               accent="cyan"
             >
-              <LinkedInLogoIcon className="h-5 w-5" />
+              <FaLinkedinIn className="h-5 w-5" />
             </SocialIconBadge>
           }
-        />
+          />
+        </InViewItem>
 
-        <ContactCard
+        <InViewItem>
+          <ContactCard
           label="Instagram"
           value="instagram.com/igaramadana"
-          href="https://instagram.com/igarmdna"
+          href={siteConfig.social.instagram}
           accent="pink"
           icon={
             <SocialIconBadge
-              href="https://instagram.com/igarmdna"
               label="Instagram"
               accent="pink"
             >
-              <InstagramLogoIcon className="size-5" strokeWidth={2.2} />
+              <FaInstagram className="size-5" strokeWidth={2.2} />
             </SocialIconBadge>
           }
-        />
-      </div>
+          />
+        </InViewItem>
+      </InViewGroup>
 
-      <div className="relative flex flex-wrap items-center justify-center gap-4 px-6">
-        <ContactButton href="mailto:igrmdns085@gmail.com" primary>
+      <InView className="relative flex flex-wrap items-center justify-center gap-4 px-6">
+        <ChamferButton href={`mailto:${siteConfig.author.email}`} variant="primary">
           <>
-            <Mail className="size-4" />
+            <FiMail className="size-4" />
             Send Email
           </>
-        </ContactButton>
+        </ChamferButton>
 
-        <ContactButton href="https://github.com/igaramadana" external>
+        <ChamferButton href={siteConfig.social.github} external>
           <>
-            <GitHubLogoIcon className="h-4 w-4" />
+            <FaGithub className="h-4 w-4" />
             Visit GitHub
           </>
-        </ContactButton>
+        </ChamferButton>
 
-        <ContactButton href="https://linkedin.com/in/igaramadana" external>
+        <ChamferButton href={siteConfig.social.linkedin} external>
           <>
-            <LinkedInLogoIcon className="h-4 w-4" />
+            <FaLinkedinIn className="h-4 w-4" />
             Visit LinkedIn
           </>
-        </ContactButton>
+        </ChamferButton>
 
-        <ContactButton href="https://instagram.com/igaramadana" external>
+        <ChamferButton href={siteConfig.social.instagram} external>
           <>
-            <InstagramLogoIcon className="size-4" />
+            <FaInstagram className="size-4" />
             Visit Instagram
           </>
-        </ContactButton>
-      </div>
+        </ChamferButton>
+      </InView>
     </section>
   );
 }

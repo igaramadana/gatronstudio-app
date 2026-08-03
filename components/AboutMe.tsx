@@ -1,34 +1,4 @@
-import Link from "next/link";
-
-function AboutButton({
-  href,
-  children,
-}: {
-  href: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <Link
-      href={href}
-      className="group relative inline-flex shrink-0 items-center justify-center px-5 py-2.5 lg:px-6 lg:py-3 transition-transform duration-150 active:scale-[0.97]"
-    >
-      <span
-        className="absolute inset-0 [clip-path:polygon(12px_0,100%_0,100%_calc(100%-12px),calc(100%-12px)_100%,0_100%,0_12px)] bg-[#0C0F14] transition-all duration-300 group-hover:brightness-125"
-        aria-hidden="true"
-      />
-      <span
-        className="absolute inset-0 [clip-path:polygon(12px_0,100%_0,100%_calc(100%-12px),calc(100%-12px)_100%,0_100%,0_12px)] bg-white/30 p-px"
-        aria-hidden="true"
-      >
-        <span className="block h-full w-full [clip-path:polygon(12px_0,100%_0,100%_calc(100%-12px),calc(100%-12px)_100%,0_100%,0_12px)] bg-[#0C0F14]" />
-      </span>
-
-      <span className="relative font-quantico text-sm uppercase leading-none text-white transition-all duration-300 group-hover:text-white/90 group-hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.3)] lg:text-[1.05rem]">
-        {children}
-      </span>
-    </Link>
-  );
-}
+import { InViewGroup, InViewItem } from "@/components/motion-primitives/in-view";
 
 function Highlight({ children }: { children: React.ReactNode }) {
   return (
@@ -95,36 +65,47 @@ export default function AboutSection() {
       <HexPatternLeft />
       <HexPatternRight />
 
-      <div className="relative z-10 mx-auto flex max-w-5xl flex-col items-center gap-8 px-8 text-center sm:px-10 lg:gap-12">
-        <p className="font-quantico text-sm font-bold uppercase leading-[1.2] tracking-[0.22em] text-white/55">
-          About Me
-        </p>
+      <InViewGroup
+        stagger={0.1}
+        className="relative z-10 mx-auto flex max-w-5xl flex-col items-center gap-8 px-8 text-center sm:px-10 lg:gap-12"
+      >
+        <InViewItem>
+          <p className="font-quantico text-sm font-bold uppercase leading-[1.2] tracking-[0.22em] text-white/55">
+            About Me
+          </p>
+        </InViewItem>
 
-        <div className="font-quantico text-2xl font-normal leading-[1.2] tracking-tight text-white/75 md:text-3xl lg:text-4xl xl:text-5xl">
-          <span>Saya adalah seorang </span>
+        <InViewItem>
+          <h2 className="font-quantico text-2xl font-normal leading-[1.2] tracking-tight text-white/75 md:text-3xl lg:text-4xl xl:text-5xl">
+            <span>Saya adalah seorang </span>
             <Highlight>Web Developer</Highlight>
             <span> dan </span>
             <Highlight>FiveM Developer</Highlight>
             <span> yang saat ini berdomisili di </span>
             <Highlight>Malang</Highlight>
-          <span>.</span>
-        </div>
+            <span>.</span>
+          </h2>
+        </InViewItem>
 
-        <p className="max-w-3xl text-sm leading-7 text-white/58 md:text-base">
-          Saya mulai mengenal dunia teknologi sejak usia 8 tahun, dan sejak saat itu
-          ketertarikan saya terhadap pengembangan digital terus tumbuh hingga menjadi
-          bagian penting dalam perjalanan karier saya.
-        </p>
+        <InViewItem>
+          <p className="max-w-3xl text-sm leading-7 text-white/58 md:text-base">
+            Saya mulai mengenal dunia teknologi sejak usia 8 tahun, dan sejak saat itu
+            ketertarikan saya terhadap pengembangan digital terus tumbuh hingga menjadi
+            bagian penting dalam perjalanan karier saya.
+          </p>
+        </InViewItem>
 
-        <p className="max-w-3xl text-sm leading-7 text-white/58 md:text-base">
-          Selama kurang lebih 4 tahun, saya menekuni bidang web development dengan fokus
-          membangun solusi yang fungsional, efisien, dan user-friendly. Dalam 2 tahun
-          terakhir, saya juga aktif sebagai game developer, khususnya dalam pengembangan
-          server dan sistem pada platform FiveM. Bagi saya, teknologi bukan hanya
-          pekerjaan, tetapi juga passion yang terus saya eksplorasi dan kembangkan
-          setiap hari.
-        </p>
-      </div>
+        <InViewItem>
+          <p className="max-w-3xl text-sm leading-7 text-white/58 md:text-base">
+            Selama kurang lebih 4 tahun, saya menekuni bidang web development dengan fokus
+            membangun solusi yang fungsional, efisien, dan user-friendly. Dalam 2 tahun
+            terakhir, saya juga aktif sebagai game developer, khususnya dalam pengembangan
+            server dan sistem pada platform FiveM. Bagi saya, teknologi bukan hanya
+            pekerjaan, tetapi juga passion yang terus saya eksplorasi dan kembangkan
+            setiap hari.
+          </p>
+        </InViewItem>
+      </InViewGroup>
     </section>
   );
 }
