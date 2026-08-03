@@ -15,6 +15,10 @@ import {
   heroStaggerContainer,
   revealVariants,
 } from "@/lib/motion";
+import {
+  trackNavigationClick,
+  trackSocialClick,
+} from "@/lib/analytics";
 import { siteConfig } from "@/lib/site";
 
 const ROLES = ["FiveM Developer", "Web Developer"] as const;
@@ -43,6 +47,12 @@ function SocialLink({
     >
       <Link
         href={href}
+        onClick={() =>
+          trackSocialClick({
+            platform: label.toLowerCase(),
+            linkLocation: "hero",
+          })
+        }
         target="_blank"
         rel="noopener noreferrer"
         aria-label={label}
@@ -262,8 +272,29 @@ export default function HeroSection() {
                   variants={revealVariants.blurUp}
                   className="flex flex-wrap items-start gap-3 sm:gap-4"
                 >
-                  <ChamferButton href="#about">About Me</ChamferButton>
-                  <ChamferButton href="#projects" variant="primary">
+                  <ChamferButton
+                    href="#about"
+                    onClick={() =>
+                      trackNavigationClick({
+                        linkName: "about_me",
+                        linkTarget: "#about",
+                        linkLocation: "hero",
+                      })
+                    }
+                  >
+                    About Me
+                  </ChamferButton>
+                  <ChamferButton
+                    href="#projects"
+                    variant="primary"
+                    onClick={() =>
+                      trackNavigationClick({
+                        linkName: "view_projects",
+                        linkTarget: "#projects",
+                        linkLocation: "hero",
+                      })
+                    }
+                  >
                     View Projects
                   </ChamferButton>
                 </motion.div>

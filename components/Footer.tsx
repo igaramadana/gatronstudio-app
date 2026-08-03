@@ -6,6 +6,11 @@ import { motion } from "framer-motion";
 import { FaGithub, FaInstagram, FaLinkedinIn } from "react-icons/fa6";
 
 import { InViewGroup, InViewItem } from "@/components/motion-primitives/in-view";
+import {
+  trackContactClick,
+  trackNavigationClick,
+  trackSocialClick,
+} from "@/lib/analytics";
 import { revealVariants } from "@/lib/motion";
 import { siteConfig } from "@/lib/site";
 
@@ -62,6 +67,12 @@ function SocialIconLink({
     >
       <Link
         href={href}
+        onClick={() =>
+          trackSocialClick({
+            platform: label.toLowerCase(),
+            linkLocation: "footer",
+          })
+        }
         target="_blank"
         rel="noopener noreferrer"
         aria-label={label}
@@ -76,13 +87,22 @@ function SocialIconLink({
 function FooterTextLink({
   href,
   children,
+  label,
 }: {
   href: string;
   children: React.ReactNode;
+  label: string;
 }) {
   return (
     <Link
       href={href}
+      onClick={() =>
+        trackNavigationClick({
+          linkName: label,
+          linkTarget: href,
+          linkLocation: "footer",
+        })
+      }
       className="group relative transition-colors duration-200 hover:text-white"
     >
       {children}
@@ -153,6 +173,12 @@ export default function Footer() {
             project digitalmu, mari bangun sesuatu yang keren bersama.{" "}
             <a
               href={`mailto:${siteConfig.author.email}`}
+              onClick={() =>
+                trackContactClick({
+                  contactMethod: "email",
+                  linkLocation: "footer",
+                })
+              }
               className="group relative inline text-white no-underline"
             >
               <span className="relative transition-colors duration-200 group-hover:text-lime-300">
@@ -206,8 +232,12 @@ export default function Footer() {
             variants={revealVariants.blurUp}
             className="flex flex-wrap items-center justify-center gap-4 font-quantico text-base leading-normal text-white/55 lg:justify-start lg:gap-6 lg:text-lg"
           >
-            <FooterTextLink href="/terms">Terms & Conditions</FooterTextLink>
-            <FooterTextLink href="/privacy">Privacy Policy</FooterTextLink>
+            <FooterTextLink href="/terms" label="terms_conditions">
+              Terms & Conditions
+            </FooterTextLink>
+            <FooterTextLink href="/privacy" label="privacy_policy">
+              Privacy Policy
+            </FooterTextLink>
           </motion.div>
 
           <motion.p

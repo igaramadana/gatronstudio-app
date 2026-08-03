@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import Link from "next/link";
-import type { ReactNode } from "react";
+import type { MouseEventHandler, ReactNode } from "react";
 
 type ChamferButtonProps = {
   href: string;
@@ -10,6 +10,7 @@ type ChamferButtonProps = {
   disabled?: boolean;
   className?: string;
   ariaLabel?: string;
+  onClick?: MouseEventHandler<HTMLAnchorElement>;
 };
 
 export default function ChamferButton({
@@ -20,6 +21,7 @@ export default function ChamferButton({
   disabled = false,
   className,
   ariaLabel,
+  onClick,
 }: ChamferButtonProps) {
   const isPrimary = variant === "primary";
   const isExternal = external ?? /^https?:\/\//.test(href);
@@ -76,6 +78,7 @@ export default function ChamferButton({
       rel={isExternal ? "noopener noreferrer" : undefined}
       className={rootClassName}
       aria-label={ariaLabel}
+      onClick={onClick}
     >
       {content}
     </Link>

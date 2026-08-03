@@ -11,6 +11,11 @@ import {
   CarouselItem,
 } from "@/components/motion-primitives/carousel";
 import ChamferButton from "@/components/ui/ChamferButton";
+import {
+  trackProjectClick,
+  trackProjectFilter,
+  trackProjectPagination,
+} from "@/lib/analytics";
 import { projectCarouselTransition, revealVariants } from "@/lib/motion";
 import {
   FiArrowLeft,
@@ -419,6 +424,13 @@ function ProjectCard({
               variant="primary"
               external={!liveDisabled}
               disabled={liveDisabled}
+              onClick={() =>
+                trackProjectClick({
+                  projectName: title,
+                  projectCategory: category,
+                  destination: "live_demo",
+                })
+              }
             >
               <>
                 <FiExternalLink className="size-4" />
@@ -430,6 +442,13 @@ function ProjectCard({
               href={github}
               external={!githubDisabled}
               disabled={githubDisabled}
+              onClick={() =>
+                trackProjectClick({
+                  projectName: title,
+                  projectCategory: category,
+                  destination: "github",
+                })
+              }
             >
               <>
                 <FiGitBranch className="size-4" />
@@ -536,14 +555,36 @@ export default function ProjectsSection() {
   const handleCategoryChange = (category: Category) => {
     if (category === activeCategory) return;
 
+    trackProjectFilter(category);
     setCurrentPage(1);
     setActiveCategory(category);
     requestAnimationFrame(scrollToGrid);
   };
 
-  const goToPage = (page: number) => {
+  const goToPage = (
+    page: number,
+    paginationMethod: "next" | "previous" | "indicator",
+  ) => {
     if (page === currentPage || page < 1 || page > totalPages) return;
 
+    trackProjectPagination({
+      projectCategory: activeCategory,
+      pageNumber: page,
+      paginationMethod,
+    });
+    setCurrentPage(page);
+  };
+
+  const handleCarouselIndexChange = (index: number) => {
+    const page = index + 1;
+
+    if (page === currentPage) return;
+
+    trackProjectPagination({
+      projectCategory: activeCategory,
+      pageNumber: page,
+      paginationMethod: "carousel",
+    });
     setCurrentPage(page);
   };
 
@@ -595,7 +636,7 @@ export default function ProjectsSection() {
           <Carousel
             key={activeCategory}
             index={currentPage - 1}
-            onIndexChange={(index) => setCurrentPage(index + 1)}
+            onIndexChange={handleCarouselIndexChange}
             ariaLabel={`${activeCategory} projects`}
           >
             <CarouselContent transition={projectCarouselTransition}>
@@ -624,7 +665,7 @@ export default function ProjectsSection() {
         >
           <PaginationButton
             ariaLabel="Previous page"
-            onClick={() => goToPage(currentPage - 1)}
+            onClick={() => goToPage(currentPage - 1, "previous")}
             disabled={currentPage === 1}
           >
             <FiArrowLeft className="size-4" strokeWidth={2.5} />
@@ -642,7 +683,7 @@ export default function ProjectsSection() {
                   aria-current={isActive ? "page" : undefined}
                   className="group relative flex h-6 w-8 items-center justify-center"
                   type="button"
-                  onClick={() => goToPage(page)}
+                  onClick={() => goToPage(page, "indicator")}
                 >
                   <span
                     className={`block h-1.5 rounded-full transition-[width,background-color] duration-300 ${
@@ -658,7 +699,7 @@ export default function ProjectsSection() {
 
           <PaginationButton
             ariaLabel="Next page"
-            onClick={() => goToPage(currentPage + 1)}
+            onClick={() => goToPage(currentPage + 1, "next")}
             disabled={currentPage === totalPages}
           >
             <FiArrowRight className="size-4" strokeWidth={2.5} />

@@ -6,6 +6,8 @@ import { useEffect, useState } from "react";
 import { FiMenu, FiX } from "react-icons/fi";
 import clsx from "clsx";
 
+import { trackNavigationClick } from "@/lib/analytics";
+
 const navLinks = [
   { name: "About", href: "#about" },
   { name: "Focus", href: "#focus-area" },
@@ -30,15 +32,24 @@ function NavItem({
   name,
   href,
   onClick,
+  location,
 }: {
   name: string;
   href: string;
   onClick?: () => void;
+  location: "navbar_desktop" | "navbar_mobile";
 }) {
   return (
     <Link
       href={href}
-      onClick={onClick}
+      onClick={() => {
+        trackNavigationClick({
+          linkName: name.toLowerCase(),
+          linkTarget: href,
+          linkLocation: location,
+        });
+        onClick?.();
+      }}
       className="group relative flex shrink-0 items-center justify-center py-1"
     >
       <span className="font-quantico text-sm font-bold uppercase leading-none tracking-[0.16em] text-white transition-all duration-200 group-hover:text-lime-300">
@@ -93,6 +104,13 @@ export default function Navbar() {
       >
         <Link
           href="/"
+          onClick={() =>
+            trackNavigationClick({
+              linkName: "logo",
+              linkTarget: "/",
+              linkLocation: "navbar",
+            })
+          }
           className="relative block h-10 w-[160px] shrink-0 transition-opacity duration-200 hover:opacity-80 lg:h-14 lg:w-[220px]"
         >
           <Image
@@ -107,7 +125,7 @@ export default function Navbar() {
 
         <div className="hidden items-center gap-8 lg:flex">
           {navLinks.map((link) => (
-            <NavItem key={link.name} {...link} />
+            <NavItem key={link.name} {...link} location="navbar_desktop" />
           ))}
         </div>
 
@@ -139,13 +157,21 @@ export default function Navbar() {
             <NavItem
               key={link.name}
               {...link}
+              location="navbar_mobile"
               onClick={() => setIsOpen(false)}
             />
           ))}
 
           <Link
             href="#contact"
-            onClick={() => setIsOpen(false)}
+            onClick={() => {
+              trackNavigationClick({
+                linkName: "hire_me",
+                linkTarget: "#contact",
+                linkLocation: "navbar_mobile",
+              });
+              setIsOpen(false);
+            }}
             className="font-quantico inline-flex w-fit rounded-full border border-white/15 bg-white/5 px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-white transition-all duration-200 hover:border-lime-300/50 hover:bg-lime-300/10 hover:text-lime-300"
           >
             Hire Me

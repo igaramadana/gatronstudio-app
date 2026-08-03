@@ -1,9 +1,19 @@
+"use client";
+
 import Link from "next/link";
 import { FiArrowUpRight, FiMail } from "react-icons/fi";
 import { FaGithub, FaInstagram, FaLinkedinIn } from "react-icons/fa6";
 
-import { InView, InViewItem, InViewGroup } from "@/components/motion-primitives/in-view";
+import {
+  InView,
+  InViewGroup,
+  InViewItem,
+} from "@/components/motion-primitives/in-view";
 import ChamferButton from "@/components/ui/ChamferButton";
+import {
+  trackContactClick,
+  trackSocialClick,
+} from "@/lib/analytics";
 import { siteConfig } from "@/lib/site";
 
 function SocialIconBadge({
@@ -39,12 +49,14 @@ function ContactCard({
   value,
   href,
   accent = "lime",
+  onClick,
 }: {
   icon: React.ReactNode;
   label: string;
   value: string;
   href: string;
   accent?: "lime" | "cyan" | "pink";
+  onClick?: () => void;
 }) {
   const glowClass =
     accent === "lime"
@@ -67,6 +79,7 @@ function ContactCard({
       href={href}
       target={isExternal ? "_blank" : undefined}
       rel={isExternal ? "noopener noreferrer" : undefined}
+      onClick={onClick}
       className="group relative flex min-h-[180px] w-full flex-col justify-between overflow-hidden p-5 transition-transform duration-300 hover:-translate-y-1 lg:min-h-[220px] lg:p-6"
     >
       <div
@@ -153,96 +166,144 @@ export default function ContactSection() {
       <InViewGroup className="relative mx-auto grid w-full max-w-5xl grid-cols-1 gap-6 px-8 sm:px-10 md:grid-cols-2 lg:gap-8">
         <InViewItem>
           <ContactCard
-          label="Email"
-          value={siteConfig.author.email}
-          href={`mailto:${siteConfig.author.email}`}
-          accent="lime"
-          icon={
-            <SocialIconBadge
-              label="Email"
-              accent="lime"
-            >
-              <FiMail className="size-5" strokeWidth={2.2} />
-            </SocialIconBadge>
-          }
+            label="Email"
+            value={siteConfig.author.email}
+            href={`mailto:${siteConfig.author.email}`}
+            accent="lime"
+            onClick={() =>
+              trackContactClick({
+                contactMethod: "email",
+                linkLocation: "contact_card",
+              })
+            }
+            icon={
+              <SocialIconBadge label="Email" accent="lime">
+                <FiMail className="size-5" strokeWidth={2.2} />
+              </SocialIconBadge>
+            }
           />
         </InViewItem>
 
         <InViewItem>
           <ContactCard
-          label="GitHub"
-          value="github.com/igaramadana"
-          href={siteConfig.social.github}
-          accent="cyan"
-          icon={
-            <SocialIconBadge
-              label="GitHub"
-              accent="cyan"
-            >
-              <FaGithub className="h-5 w-5" />
-            </SocialIconBadge>
-          }
+            label="GitHub"
+            value="github.com/igaramadana"
+            href={siteConfig.social.github}
+            accent="cyan"
+            onClick={() =>
+              trackSocialClick({
+                platform: "github",
+                linkLocation: "contact_card",
+              })
+            }
+            icon={
+              <SocialIconBadge label="GitHub" accent="cyan">
+                <FaGithub className="h-5 w-5" />
+              </SocialIconBadge>
+            }
           />
         </InViewItem>
 
         <InViewItem>
           <ContactCard
-          label="LinkedIn"
-          value="linkedin.com/in/igaramadana"
-          href={siteConfig.social.linkedin}
-          accent="cyan"
-          icon={
-            <SocialIconBadge
-              label="LinkedIn"
-              accent="cyan"
-            >
-              <FaLinkedinIn className="h-5 w-5" />
-            </SocialIconBadge>
-          }
+            label="LinkedIn"
+            value="linkedin.com/in/igaramadana"
+            href={siteConfig.social.linkedin}
+            accent="cyan"
+            onClick={() =>
+              trackSocialClick({
+                platform: "linkedin",
+                linkLocation: "contact_card",
+              })
+            }
+            icon={
+              <SocialIconBadge label="LinkedIn" accent="cyan">
+                <FaLinkedinIn className="h-5 w-5" />
+              </SocialIconBadge>
+            }
           />
         </InViewItem>
 
         <InViewItem>
           <ContactCard
-          label="Instagram"
-          value="instagram.com/igaramadana"
-          href={siteConfig.social.instagram}
-          accent="pink"
-          icon={
-            <SocialIconBadge
-              label="Instagram"
-              accent="pink"
-            >
-              <FaInstagram className="size-5" strokeWidth={2.2} />
-            </SocialIconBadge>
-          }
+            label="Instagram"
+            value="instagram.com/igaramadana"
+            href={siteConfig.social.instagram}
+            accent="pink"
+            onClick={() =>
+              trackSocialClick({
+                platform: "instagram",
+                linkLocation: "contact_card",
+              })
+            }
+            icon={
+              <SocialIconBadge label="Instagram" accent="pink">
+                <FaInstagram className="size-5" strokeWidth={2.2} />
+              </SocialIconBadge>
+            }
           />
         </InViewItem>
       </InViewGroup>
 
       <InView className="relative flex flex-wrap items-center justify-center gap-4 px-6">
-        <ChamferButton href={`mailto:${siteConfig.author.email}`} variant="primary">
+        <ChamferButton
+          href={`mailto:${siteConfig.author.email}`}
+          variant="primary"
+          onClick={() =>
+            trackContactClick({
+              contactMethod: "email",
+              linkLocation: "contact_cta",
+            })
+          }
+        >
           <>
             <FiMail className="size-4" />
             Send Email
           </>
         </ChamferButton>
 
-        <ChamferButton href={siteConfig.social.github} external>
+        <ChamferButton
+          href={siteConfig.social.github}
+          external
+          onClick={() =>
+            trackSocialClick({
+              platform: "github",
+              linkLocation: "contact_cta",
+            })
+          }
+        >
           <>
             <FaGithub className="h-4 w-4" />
             Visit GitHub
           </>
         </ChamferButton>
 
-        <ChamferButton href={siteConfig.social.linkedin} external>
+        <ChamferButton
+          href={siteConfig.social.linkedin}
+          external
+          onClick={() =>
+            trackSocialClick({
+              platform: "linkedin",
+              linkLocation: "contact_cta",
+            })
+          }
+        >
           <>
             <FaLinkedinIn className="h-4 w-4" />
             Visit LinkedIn
           </>
         </ChamferButton>
 
-        <ChamferButton href={siteConfig.social.instagram} external>
+        <ChamferButton
+          href={siteConfig.social.instagram}
+          external
+          onClick={() =>
+            trackSocialClick({
+              platform: "instagram",
+              linkLocation: "contact_cta",
+            })
+          }
+        >
           <>
             <FaInstagram className="size-4" />
             Visit Instagram
