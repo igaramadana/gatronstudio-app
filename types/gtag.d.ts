@@ -6,13 +6,15 @@ type GoogleAnalyticsParameters = Record<
   GoogleAnalyticsValue | undefined
 >;
 
+type GoogleAnalyticsCommand = (
+  command: "event",
+  eventName: string,
+  parameters?: GoogleAnalyticsParameters,
+) => void;
+
 declare global {
   interface Window {
     dataLayer?: unknown[];
-    gtag?: (
-      command: "event",
-      eventName: string,
-      parameters?: GoogleAnalyticsParameters,
-    ) => void;
+    gtag?: GoogleAnalyticsCommand;
   }
 }

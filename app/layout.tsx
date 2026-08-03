@@ -1,4 +1,3 @@
-import Script from "next/script";
 import type { Metadata, Viewport } from "next";
 import { Quantico } from "next/font/google";
 import "lenis/dist/lenis.css";
@@ -121,37 +120,44 @@ export default function RootLayout({
 }>) {
   return (
     <html lang={siteConfig.language} suppressHydrationWarning>
+      <head>
+        {validGoogleAnalyticsId ? (
+          <>
+            <script
+              async
+              src={`https://www.googletagmanager.com/gtag/js?id=${validGoogleAnalyticsId}`}
+            />
+
+            <script
+              id="google-analytics-config"
+              dangerouslySetInnerHTML={{
+                __html: `
+                  window.dataLayer = window.dataLayer || [];
+                  function gtag(){window.dataLayer.push(arguments);}
+                  window.gtag = window.gtag || gtag;
+
+                  var gaDebugMode = new URLSearchParams(
+                    window.location.search
+                  ).get('ga_debug') === '1';
+
+                  gtag('js', new Date());
+                  gtag('config', '${validGoogleAnalyticsId}', {
+                    debug_mode: gaDebugMode,
+                    page_path: window.location.pathname,
+                    page_location: window.location.href
+                  });
+                `,
+              }}
+            />
+          </>
+        ) : null}
+      </head>
+
       <body
         className={`${quantico.variable} bg-[#050505] text-white antialiased`}
       >
         <AppProviders>{children}</AppProviders>
       </body>
-
-      {validGoogleAnalyticsId ? (
-        <>
-          <Script
-            id="google-analytics-library"
-            src={`https://www.googletagmanager.com/gtag/js?id=${validGoogleAnalyticsId}`}
-            strategy="afterInteractive"
-          />
-
-          <Script
-            id="google-analytics-config"
-            strategy="afterInteractive"
-            dangerouslySetInnerHTML={{
-              __html: `
-                window.dataLayer = window.dataLayer || [];
-                function gtag(){window.dataLayer.push(arguments);}
-                window.gtag = window.gtag || gtag;
-                gtag('js', new Date());
-                gtag('config', '${validGoogleAnalyticsId}', {
-                  page_path: window.location.pathname,
-                });
-              `,
-            }}
-          />
-        </>
-      ) : null}
     </html>
   );
 }

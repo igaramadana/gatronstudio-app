@@ -50,18 +50,46 @@ function isDebugModeEnabled() {
   return new URLSearchParams(window.location.search).get("ga_debug") === "1";
 }
 
+function ensureGtag() {
+  if (typeof window === "undefined") return undefined;
+
+  window.dataLayer ??= [];
+
+  if (typeof window.gtag !== "function") {
+    window.gtag = (...args) => {
+      window.dataLayer?.push(args);
+    };
+  }
+
+  return window.gtag;
+}
+
 export function trackEvent(
   eventName: string,
   parameters: AnalyticsParameters = {},
 ) {
-  if (typeof window === "undefined" || typeof window.gtag !== "function") {
-    return false;
-  }
+  const gtag = ensureGtag();
+  if (!gtag) return false;
 
-  window.gtag("event", eventName, {
+  const debugMode = isDebugModeEnabled();
+  const eventParameters = {
     ...removeUndefinedValues(parameters),
-    ...(isDebugModeEnabled() ? { debug_mode: true } : {}),
-  });
+    page_path: window.location.pathname,
+    page_location: window.location.href,
+    page_title: document.title,
+    ...(debugMode
+      ? {
+          debug_mode: true,
+          engagement_time_msec: 100,
+        }
+      : {}),
+  };
+
+  gtag("event", eventName, eventParameters);
+
+  if (debugMode) {
+    console.info(`[GA4] ${eventName}`, eventParameters);
+  }
 
   return true;
 }
